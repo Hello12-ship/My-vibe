@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Vibe 🎶</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #181818);
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      margin-top: 30px;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      color: #ffde59;
+      text-shadow: 0 0 15px #ffde59;
+    }
+
+    .song-list {
+      max-width: 500px;
+      margin: 20px auto;
+    }
+
+    .song {
+      background: rgba(255, 255, 255, 0.08);
+      margin: 15px;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .song h3 {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    audio {
+      width: 100%;
+      outline: none;
+      border-radius: 10px;
+    }
+
+    /* Background animation */
+    @keyframes gradient {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(-45deg, #ff4b1f, #1fddff, #28a745, #ffde59);
+      background-size: 400% 400%;
+      animation: gradient 12s ease infinite;
+      opacity: 0.15;
+      z-index: -1;
+    }
+
+    footer {
+      margin: 25px 0;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎧 My Vibe — Playlist 🎶</h1>
+  <div class="song-list">
+
+    <div class="song"><h3>Aaj Se Teri</h3><audio controls><source src="Aaj se teri.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Apa Fer Milange</h3><audio controls><source src="Apa Fer Milange.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Bulleya</h3><audio controls><source src="Bulleya.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Dekha Ek Khwab</h3><audio controls><source src="Dekha ek khwab.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Falak Tak Chal Sath Mere</h3><audio controls><source src="Falak Tak Chal Sath Mere.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Hum Tere Pyar Mein</h3><audio controls><source src="Hum Tere Pyar mein.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Itna Na Mujhse Tu Pyar Badha</h3><audio controls><source src="Itna Na Mujhse Tu Pyaar Badha.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Labon Ko</h3><audio controls><source src="Labon Ko.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Mere Samnewali Khidki Mein</h3><audio controls><source src="Mere Samnewali Khidki Mein.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>O Re Piya</h3><audio controls><source src="O Re Piya.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Sanson Ki Mala Pe</h3><audio controls><source src="Sanson Ki Mala Pe.mp3" type="audio/mpeg"></audio></div>
+    <div class="song"><h3>Toota Jo Kabhi Tara</h3><audio controls><source src="Toota Jo Kabhi Tara.mp3" type="audio/mpeg"></audio></div>
+
+  </div>
+
+  <footer>💫 Created by Akash | Chill & Vibe 💫</footer>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="Aaj se teri.mp3" type="audio/mpeg">
+  </audio>
+</body>
+  </html>
