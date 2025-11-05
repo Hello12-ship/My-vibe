@@ -1,268 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music Lounge</title>
-<style>
-:root {
-  --bg-color: #f5f5f5;
-  --text-color: #111;
-  --card-color: #fff;
-  --accent-color: #007aff;
-  --progress-bg: #ddd;
-  --progress-color: #007aff;
-}
-
-body.dark {
-  --bg-color: #111;
-  --text-color: #fff;
-  --card-color: #1c1c1c;
-  --accent-color: #00b7ff;
-  --progress-bg: #333;
-  --progress-color: #00b7ff;
-}
-
-body {
-  margin:0;
-  font-family: "Poppins", sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.5s, color 0.5s;
-  min-height:100vh;
-  padding:20px;
-}
-
-.header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-.header h1 {font-size:2rem;margin:0;}
-
-.theme-toggle {
-  background: var(--card-color);
-  color: var(--text-color);
-  border: none;
-  padding: 8px 14px;
-  border-radius: 12px;
-  cursor:pointer;
-  transition: all 0.3s;
-}
-.theme-toggle:hover {background: var(--accent-color); color:#fff;}
-
-.song-cards {
-  display:grid;
-  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
-}
-
-.card {
-  background: var(--card-color);
-  border-radius: 15px;
-  padding: 15px 20px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  display:flex;
-  flex-direction:column;
-  position: relative;
-}
-
-.card-header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.play-btn {
-  width:50px; height:50px;
-  border-radius:50%;
-  border:none;
-  background: var(--accent-color);
-  cursor:pointer;
-  outline:none;
-  font-size:20px;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition: transform 0.2s;
-}
-.play-btn:hover {transform: scale(1.1);}
-
-.song-name {flex:1;margin-left:15px;font-weight:500;}
-
-.menu-btn {
-  border:none;
-  background:none;
-  font-size:20px;
-  cursor:pointer;
-  position: relative;
-}
-
-.download-menu {
-  display:none;
-  position:absolute;
-  top:40px;
-  right:20px;
-  background: var(--card-color);
-  border:1px solid #ccc;
-  border-radius:8px;
-  padding:5px 10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.2);
-  z-index:10;
-}
-
-.download-menu button {
-  border:none;
-  background:none;
-  cursor:pointer;
-  color: var(--accent-color);
-  padding:4px 0;
-}
-
-.progress-container {
-  width:100%;
-  height:6px;
-  background: var(--progress-bg);
-  border-radius:3px;
-  margin-top:10px;
-  cursor:pointer;
-  position: relative;
-}
-
-.progress {
-  width:0%;
-  height:100%;
-  background: var(--progress-color);
-  border-radius:3px;
-  transition: width 0.1s linear;
-}
-</style>
-</head>
-<body>
-
-<div class="header">
-  <h1>🎵 Music Lounge</h1>
-  <button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
-</div>
-
-<div class="song-cards" id="songCards"></div>
-<audio id="audio"></audio>
-
-<script>
-const songs = [
-  "Aaj se teri.mp3",
-  "Apa Fer Milange.mp3",
-  "Bulleya.mp3",
-  "Dekha ek khwab.mp3",
-  "Falak Tak Chal Sath Mere.mp3",
-  "Hum Tere Pyar mein.mp3",
-  "Itna Na Mujhse Tu Pyaar Badha.mp3",
-  "Labon Ko.mp3",
-  "Mere Samnewali Khidki Mein.mp3",
-  "O Re Piya.mp3",
-  "Sanson Ki Mala Pe.mp3",
-  "saudebaazi.mp3",
-  "Toota Jo Kabhi Tara.mp3",
-  "Tu Hi Haqeeqat.mp3"
-];
-
-const audio = document.getElementById("audio");
-const songCards = document.getElementById("songCards");
-let currentIndex = -1;
-let isPlaying = false;
-
-songs.forEach((song, index)=>{
-  const card = document.createElement("div"); card.className="card";
-  const cardHeader = document.createElement("div"); cardHeader.className="card-header";
-
-  const playBtn = document.createElement("button"); playBtn.className="play-btn";
-  playBtn.textContent='▶';
-  playBtn.addEventListener("click", ()=>{
-    if(currentIndex===index && isPlaying){
-      audio.pause();
-      isPlaying=false;
-      playBtn.textContent='▶';
-    } else { loadSong(index); }
-  });
-
-  const songName = document.createElement("div"); songName.className="song-name";
-  songName.textContent = song.replace(".mp3","");
-
-  const menuBtn = document.createElement("button"); menuBtn.className="menu-btn"; menuBtn.textContent="⋮";
-  const downloadMenu = document.createElement("div"); downloadMenu.className="download-menu";
-  const downloadBtn = document.createElement("button"); downloadBtn.textContent="Download";
-  downloadBtn.addEventListener("click", ()=>{
-    const link=document.createElement("a"); link.href=song; link.download=song; link.click();
-    downloadMenu.style.display="none";
-  });
-  downloadMenu.appendChild(downloadBtn);
-
-  menuBtn.addEventListener("click",(e)=>{
-    e.stopPropagation();
-    downloadMenu.style.display = downloadMenu.style.display==="block"?"none":"block";
-  });
-
-  cardHeader.appendChild(playBtn);
-  cardHeader.appendChild(songName);
-  cardHeader.appendChild(menuBtn);
-  card.appendChild(cardHeader);
-  card.appendChild(downloadMenu);
-
-  const progressContainer = document.createElement("div"); progressContainer.className="progress-container";
-  const progress = document.createElement("div"); progress.className="progress";
-  progressContainer.appendChild(progress);
-  card.appendChild(progressContainer);
-
-  songCards.appendChild(card);
-
-  song.playBtnEl=playBtn;
-  song.progressEl=progress;
-  song.cardEl=card;
-
-  // progress seek
-  progressContainer.addEventListener("click",(e)=>{
-    if(audio.src){
-      const rect=progressContainer.getBoundingClientRect();
-      const clickX=e.clientX-rect.left;
-      const width=rect.width;
-      const seekTime=(clickX/width)*audio.duration;
-      audio.currentTime=seekTime;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>-Music lounge 🎵</title>
+  <style>
+    :root {
+      --bg-light: linear-gradient(135deg, #f5f5f5, #d0e0ff);
+      --bg-dark: linear-gradient(135deg, #101820, #2a2a72);
+      --text-light: #111;
+      --text-dark: #fff;
+      --card-light: rgba(255,255,255,0.9);
+      --card-dark: rgba(255,255,255,0.1);
     }
-  });
-});
 
-function loadSong(index){
-  currentIndex=index;
-  audio.src=songs[index];
-  audio.play();
-  isPlaying=true;
-  updatePlayButtons();
-}
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      text-align: center;
+      min-height: 100vh;
+      transition: background 0.5s, color 0.5s;
+    }
 
-function updatePlayButtons(){
-  songs.forEach((song,idx)=>{
-    if(idx===currentIndex && isPlaying){ song.playBtnEl.textContent='❚❚'; }
-    else { song.playBtnEl.textContent='▶'; }
-  });
-}
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
 
-audio.addEventListener("timeupdate",()=>{
-  if(currentIndex>=0){
-    const song = songs[currentIndex];
-    const progressPercent = (audio.currentTime/audio.duration)*100||0;
-    song.progressEl.style.width=progressPercent+"%";
-  }
-});
+    header {
+      padding: 20px;
+      font-size: 2em;
+      font-weight: 700;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      letter-spacing: 1px;
+    }
 
-audio.addEventListener("ended",()=>{
-  isPlaying=false;
-  updatePlayButtons();
-});
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.2);
+      color: inherit;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .theme-toggle:hover {
+      background: rgba(255,255,255,0.4);
+    }
 
-function toggleTheme(){ document.body.classList.toggle("dark"); }
-</script>
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 15px;
+      gap: 15px;
+    }
 
+    .song-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      width: 85%;
+      max-width: 380px;
+      padding: 15px 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+    body.light .song-card { background: var(--card-light); }
+    body.dark .song-card { background: var(--card-dark); }
+
+    .song-card:hover {
+      transform: scale(1.02);
+      background: rgba(255,255,255,0.15);
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 8px;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 0.9em;
+      color: rgba(255,255,255,0.6);
+    }
+  </style>
+</head>
+<body class="light">
+  <button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
+  <header>-Music lounge ♪</header>
+  <div class="container">
+
+    <div class="song-card">
+      <h3>Aaj se teri</h3>
+      <audio controls><source src="Aaj se teri.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Apa Fer Milange</h3>
+      <audio controls><source src="Apa Fer Milange.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Bulleya</h3>
+      <audio controls><source src="Bulleya.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Dekha ek khwab</h3>
+      <audio controls><source src="Dekha ek khwab.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Falak Tak Chal Sath Mere</h3>
+      <audio controls><source src="Falak Tak Chal Sath Mere.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Hum Tere Pyar mein</h3>
+      <audio controls><source src="Hum Tere Pyar mein.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Itna Na Mujhse Tu Pyaar Badha</h3>
+      <audio controls><source src="Itna Na Mujhse Tu Pyaar Badha.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Labon Ko</h3>
+      <audio controls><source src="Labon Ko.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Mere Samnewali Khidki Mein</h3>
+      <audio controls><source src="Mere Samnewali Khidki Mein.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>O Re Piya</h3>
+      <audio controls><source src="O Re Piya.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Sanson Ki Mala Pe</h3>
+      <audio controls><source src="Sanson Ki Mala Pe.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>saudebaazi</h3>
+      <audio controls><source src="saudebaazi.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Toota Jo Kabhi Tara</h3>
+      <audio controls><source src="Toota Jo Kabhi Tara.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <div class="song-card">
+      <h3>Tu Hi Haqeeqat</h3>
+      <audio controls><source src="Tu Hi Haqeeqat.mp3" type="audio/mpeg"></audio>
+    </div>
+
+  </div>
+
+  <footer>Made with ❤️ by Akash</footer>
+
+  <script>
+    function toggleTheme(){
+      document.body.classList.toggle('dark');
+      document.body.classList.toggle('light');
+    }
+  </script>
 </body>
-</html>
+  </html>
