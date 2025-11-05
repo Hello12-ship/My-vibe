@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Akash Vibes 🎵</title>
 <style>
 :root {
@@ -11,14 +11,12 @@
   --card-color: #f2f2f2;
   --accent-color: #007aff;
 }
-
 body.dark {
   --bg-color: #0e0e0e;
   --text-color: #fff;
   --card-color: #1c1c1c;
   --accent-color: #00b7ff;
 }
-
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -26,7 +24,6 @@ body {
   color: var(--text-color);
   transition: background 0.5s, color 0.5s;
 }
-
 header {
   font-size: 2rem;
   font-weight: 600;
@@ -35,7 +32,6 @@ header {
   letter-spacing: 1px;
   background: var(--card-color);
 }
-
 .theme-toggle {
   position: fixed;
   top: 15px;
@@ -54,16 +50,18 @@ header {
   color: white;
 }
 
-.container {
+/* Library Screen */
+#library {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px 10px;
-  gap: 20px;
+  gap: 15px;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
 }
 
+/* Song Card */
 .song-card {
   background: var(--card-color);
   width: 95%;
@@ -73,39 +71,51 @@ header {
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   cursor: pointer;
   transition: transform 0.2s, background 0.3s;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 .song-card:hover {
   transform: scale(1.02);
   background: rgba(0,0,0,0.05);
 }
 
+/* Song Detail Screen */
+#detail {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px;
+}
+
+.song-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.song-meta {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+  text-align: center;
+}
 .song-image {
-  width: 100%;
-  max-width: 400px;
+  width: 80%;
+  max-width: 300px;
   border-radius: 20px;
   filter: brightness(1.2);
   box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  margin-bottom: 15px;
 }
-
 audio {
-  width: 100%;
+  width: 90%;
+  margin-bottom: 15px;
 }
-
-.song-info {
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.download-btn {
-  margin-top: 5px;
+.download-btn, .back-btn {
+  margin-top: 8px;
   background: var(--accent-color);
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 8px 15px;
   cursor: pointer;
 }
 </style>
@@ -115,7 +125,18 @@ audio {
 <button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
 <header>🎧 Akash Vibes</header>
 
-<div class="container" id="library"></div>
+<!-- Library Screen -->
+<div id="library"></div>
+
+<!-- Song Detail Screen -->
+<div id="detail">
+  <div class="song-title" id="songTitle"></div>
+  <div class="song-meta" id="songMeta"></div>
+  <img src="audio.jpg" alt="Audio Cover" class="song-image">
+  <audio id="audio" controls></audio>
+  <button class="download-btn" id="downloadBtn">Download</button>
+  <button class="back-btn" onclick="backToLibrary()">Back</button>
+</div>
 
 <script>
 const songs = [
@@ -136,45 +157,43 @@ const songs = [
 ];
 
 const library = document.getElementById('library');
-let currentAudio = null;
+const detail = document.getElementById('detail');
+const songTitle = document.getElementById('songTitle');
+const songMeta = document.getElementById('songMeta');
+const audio = document.getElementById('audio');
+const downloadBtn = document.getElementById('downloadBtn');
 
-// Render each song as a vertical card
-songs.forEach((song, index) => {
+songs.forEach((song, index)=>{
   const card = document.createElement('div');
   card.classList.add('song-card');
-  card.innerHTML = `
-    <strong>${song.title}</strong>
-    <div class="song-info">Singer: ${song.singer}<br>Composer: ${song.composer}<br>Lyricist: ${song.lyricist}<br>Movie: ${song.movie}</div>
-    <img src="audio.jpg" alt="Audio Cover" class="song-image">
-    <audio controls preload="none">
-      <source src="${song.file}" type="audio/mpeg">
-    </audio>
-    <button class="download-btn">Download</button>
-  `;
-  const audioEl = card.querySelector('audio');
-  const downloadBtn = card.querySelector('button');
-
-  // Download functionality
-  downloadBtn.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    const a = document.createElement('a');
-    a.href = song.file;
-    a.download = song.file;
-    a.click();
-  });
-
-  // Play next song on tap (whole card click)
+  card.textContent = song.title;
   card.addEventListener('click', ()=>{
-    if(currentAudio && currentAudio !== audioEl){
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-    }
-    currentAudio = audioEl;
-    audioEl.play();
+    showDetail(index);
   });
-
   library.appendChild(card);
 });
+
+function showDetail(index){
+  const s = songs[index];
+  songTitle.textContent = s.title;
+  songMeta.textContent = `Singer: ${s.singer} | Composer: ${s.composer} | Lyricist: ${s.lyricist} | Movie: ${s.movie}`;
+  audio.src = s.file;
+  audio.play();
+  downloadBtn.onclick = ()=> {
+    const a = document.createElement('a');
+    a.href = s.file;
+    a.download = s.file;
+    a.click();
+  }
+  library.style.display = 'none';
+  detail.style.display = 'flex';
+}
+
+function backToLibrary(){
+  audio.pause();
+  detail.style.display = 'none';
+  library.style.display = 'flex';
+}
 
 function toggleTheme(){
   document.body.classList.toggle('dark');
