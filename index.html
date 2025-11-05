@@ -13,6 +13,7 @@
     --progress-bg: #ddd;
     --progress-color: #007aff;
   }
+
   body.dark {
     --bg-color: #111;
     --text-color: #fff;
@@ -68,64 +69,72 @@
   .card {
     background: var(--card-color);
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px 20px;
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    align-items: center;
     transition: background 0.3s;
+    position: relative;
   }
 
-  .card .play-btn-wrapper {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    margin-bottom: 15px;
+  .card:hover {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .play-btn {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: none;
     background: var(--accent-color);
     cursor: pointer;
-    z-index: 1;
-    position: relative;
     outline: none;
+    transition: transform 0.2s;
   }
 
-  /* Visualizer bars */
-  .visualizer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80px;
-    height: 80px;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .bar {
-    width: 4px;
-    height: 10px;
-    background: rgba(255,255,255,0.7);
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform-origin: bottom center;
-    animation: bounce 1s infinite;
-  }
-
-  @keyframes bounce {
-    0%, 100% { height: 10px; }
-    50% { height: 30px; }
+  .play-btn:hover {
+    transform: scale(1.1);
   }
 
   .song-name {
+    flex: 1;
+    margin-left: 15px;
     font-weight: 500;
-    margin-bottom: 10px;
-    text-align: center;
+  }
+
+  .menu-btn {
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .download-menu {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    background: var(--card-color);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+
+  .download-menu button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--accent-color);
+    padding: 4px 0;
   }
 
   .progress-container {
@@ -133,7 +142,8 @@
     height: 6px;
     background: var(--progress-bg);
     border-radius: 3px;
-    margin-bottom: 10px;
+    margin-top: 10px;
+    cursor: pointer;
   }
 
   .progress {
@@ -141,23 +151,7 @@
     height: 100%;
     background: var(--progress-color);
     border-radius: 3px;
-    transition: width 0.2s linear;
-  }
-
-  .controls {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .download-btn {
-    background: var(--accent-color);
-    color: #fff;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 12px;
+    transition: width 0.1s linear;
   }
 </style>
 </head>
@@ -192,75 +186,83 @@ const songs = [
 
 const audio = document.getElementById("audio");
 const songCards = document.getElementById("songCards");
-let currentIndex = 0;
+let currentIndex = -1;
 let isPlaying = false;
-
-function createVisualizer(parent) {
-  const vis = document.createElement("div");
-  vis.className = "visualizer";
-  for (let i=0;i<12;i++){
-    const bar = document.createElement("div");
-    bar.className = "bar";
-    bar.style.transform = `rotate(${i*30}deg) translateX(20px)`;
-    bar.style.animationDelay = `${i*0.1}s`;
-    vis.appendChild(bar);
-  }
-  parent.appendChild(vis);
-}
 
 songs.forEach((song, index) => {
   const card = document.createElement("div");
   card.className = "card";
 
-  const playWrapper = document.createElement("div");
-  playWrapper.className = "play-btn-wrapper";
+  const cardHeader = document.createElement("div");
+  cardHeader.className = "card-header";
 
   const playBtn = document.createElement("button");
   playBtn.className = "play-btn";
   playBtn.addEventListener("click", () => {
     if (currentIndex === index && isPlaying) {
-      pauseMusic(playBtn);
+      audio.pause();
+      isPlaying = false;
+      playBtn.textContent = "";
     } else {
       loadSong(index, playBtn);
     }
   });
 
-  createVisualizer(playWrapper);
-
   const songName = document.createElement("div");
   songName.className = "song-name";
   songName.textContent = song.replace(".mp3", "");
 
-  const progressContainer = document.createElement("div");
-  progressContainer.className = "progress-container";
-  const progress = document.createElement("div");
-  progress.className = "progress";
-  progressContainer.appendChild(progress);
+  const menuBtn = document.createElement("button");
+  menuBtn.className = "menu-btn";
+  menuBtn.textContent = "⋮";
 
-  const controls = document.createElement("div");
-  controls.className = "controls";
+  const downloadMenu = document.createElement("div");
+  downloadMenu.className = "download-menu";
+
   const downloadBtn = document.createElement("button");
-  downloadBtn.className = "download-btn";
   downloadBtn.textContent = "Download";
   downloadBtn.addEventListener("click", () => {
     const link = document.createElement("a");
     link.href = song;
     link.download = song;
     link.click();
+    downloadMenu.style.display = "none";
   });
-  controls.appendChild(downloadBtn);
+  downloadMenu.appendChild(downloadBtn);
 
-  playWrapper.appendChild(playBtn);
-  card.appendChild(playWrapper);
-  card.appendChild(songName);
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    downloadMenu.style.display = downloadMenu.style.display === "block" ? "none" : "block";
+  });
+
+  cardHeader.appendChild(playBtn);
+  cardHeader.appendChild(songName);
+  cardHeader.appendChild(menuBtn);
+  card.appendChild(cardHeader);
+  card.appendChild(downloadMenu);
+
+  const progressContainer = document.createElement("div");
+  progressContainer.className = "progress-container";
+  const progress = document.createElement("div");
+  progress.className = "progress";
+  progressContainer.appendChild(progress);
   card.appendChild(progressContainer);
-  card.appendChild(controls);
 
   songCards.appendChild(card);
 
-  // save elements for updating progress
-  song.progressEl = progress;
+  // Save references
   song.playBtnEl = playBtn;
+  song.progressEl = progress;
+  song.cardEl = card;
+
+  // Progress seek
+  progressContainer.addEventListener("click", (e) => {
+    const rect = progressContainer.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const seekTime = (clickX / width) * audio.duration;
+    audio.currentTime = seekTime;
+  });
 });
 
 function loadSong(index, btn) {
@@ -268,35 +270,26 @@ function loadSong(index, btn) {
   audio.src = songs[index];
   audio.play();
   isPlaying = true;
-
-  updatePlayButtons();
-}
-
-function pauseMusic(btn) {
-  audio.pause();
-  isPlaying = false;
   updatePlayButtons();
 }
 
 function updatePlayButtons() {
   songs.forEach((song, idx) => {
-    if (idx === currentIndex && isPlaying) {
-      song.playBtnEl.style.background = "var(--accent-color)";
-    } else {
-      song.playBtnEl.style.background = "var(--accent-color)";
-    }
+    song.playBtnEl.style.background = idx === currentIndex && isPlaying ? "var(--accent-color)" : "#aaa";
   });
 }
 
 audio.addEventListener("timeupdate", () => {
-  const song = songs[currentIndex];
-  const progressPercent = (audio.currentTime / audio.duration) * 100;
-  if (song && song.progressEl) song.progressEl.style.width = progressPercent + "%";
+  if (currentIndex >= 0) {
+    const song = songs[currentIndex];
+    const progressPercent = (audio.currentTime / audio.duration) * 100 || 0;
+    song.progressEl.style.width = progressPercent + "%";
+  }
 });
 
 audio.addEventListener("ended", () => {
-  currentIndex = (currentIndex + 1) % songs.length;
-  loadSong(currentIndex);
+  isPlaying = false;
+  updatePlayButtons();
 });
 
 function toggleTheme() {
@@ -305,4 +298,4 @@ function toggleTheme() {
 </script>
 
 </body>
-</html>
+  </html>
