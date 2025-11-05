@@ -1,137 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vibes</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #101820, #2a2a72);
-      color: #fff;
-      text-align: center;
-      min-height: 100vh;
-    }
-    header {
-      padding: 20px;
-      font-size: 2em;
-      font-weight: 700;
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      letter-spacing: 1px;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px 15px;
-      gap: 20px;
-    }
-    .song-card {
-      background: rgba(255,255,255,0.1);
-      border-radius: 20px;
-      width: 90%;
-      max-width: 450px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      transition: transform 0.2s ease, background 0.3s ease;
-    }
-    .song-card:hover {
-      transform: scale(1.03);
-      background: rgba(255,255,255,0.15);
-    }
-    audio {
-      width: 100%;
-      margin-top: 10px;
-      border-radius: 10px;
-      outline: none;
-    }
-    footer {
-      margin-top: 40px;
-      padding: 20px;
-      font-size: 0.9em;
-      color: rgba(255,255,255,0.6);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Lounge</title>
+<style>
+  :root {
+    --bg-color: #f5f5f5;
+    --text-color: #111;
+    --card-color: #fff;
+    --accent-color: #007aff;
+    --progress-bg: #ddd;
+    --progress-color: #007aff;
+  }
+  body.dark {
+    --bg-color: #111;
+    --text-color: #fff;
+    --card-color: #1c1c1c;
+    --accent-color: #00b7ff;
+    --progress-bg: #333;
+    --progress-color: #00b7ff;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.5s, color 0.5s;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+    margin: 0;
+  }
+
+  .theme-toggle {
+    background: var(--card-color);
+    color: var(--text-color);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .theme-toggle:hover {
+    background: var(--accent-color);
+    color: #fff;
+  }
+
+  .song-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--card-color);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.3s;
+  }
+
+  .card .play-btn-wrapper {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+  }
+
+  .play-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: var(--accent-color);
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    outline: none;
+  }
+
+  /* Visualizer bars */
+  .visualizer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .bar {
+    width: 4px;
+    height: 10px;
+    background: rgba(255,255,255,0.7);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform-origin: bottom center;
+    animation: bounce 1s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { height: 10px; }
+    50% { height: 30px; }
+  }
+
+  .song-name {
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .progress-container {
+    width: 100%;
+    height: 6px;
+    background: var(--progress-bg);
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+
+  .progress {
+    width: 0%;
+    height: 100%;
+    background: var(--progress-color);
+    border-radius: 3px;
+    transition: width 0.2s linear;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .download-btn {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+</style>
 </head>
 <body>
-  <header>🎧 Music Lounge -</header>
-  <div class="container">
 
-    <div class="song-card">
-      <h3>Aaj se teri</h3>
-      <audio controls><source src="Aaj se teri.mp3" type="audio/mpeg"></audio>
-    </div>
+<div class="header">
+  <h1>🎵 Music Lounge</h1>
+  <button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
+</div>
 
-    <div class="song-card">
-      <h3>Apa Fer Milange</h3>
-      <audio controls><source src="Apa Fer Milange.mp3" type="audio/mpeg"></audio>
-    </div>
+<div class="song-cards" id="songCards"></div>
 
-    <div class="song-card">
-      <h3>Bulleya</h3>
-      <audio controls><source src="Bulleya.mp3" type="audio/mpeg"></audio>
-    </div>
+<audio id="audio"></audio>
 
-    <div class="song-card">
-      <h3>Dekha ek khwab</h3>
-      <audio controls><source src="Dekha ek khwab.mp3" type="audio/mpeg"></audio>
-    </div>
+<script>
+const songs = [
+  "Aaj se teri.mp3",
+  "Apa Fer Milange.mp3",
+  "Bulleya.mp3",
+  "Dekha ek khwab.mp3",
+  "Falak Tak Chal Sath Mere.mp3",
+  "Hum Tere Pyar mein.mp3",
+  "Itna Na Mujhse Tu Pyaar Badha.mp3",
+  "Labon Ko.mp3",
+  "Mere Samnewali Khidki Mein.mp3",
+  "O Re Piya.mp3",
+  "Sanson Ki Mala Pe.mp3",
+  "saudebaazi.mp3",
+  "Toota Jo Kabhi Tara.mp3",
+  "Tu Hi Haqeeqat.mp3"
+];
 
-    <div class="song-card">
-      <h3>Falak Tak Chal Sath Mere</h3>
-      <audio controls><source src="Falak Tak Chal Sath Mere.mp3" type="audio/mpeg"></audio>
-    </div>
+const audio = document.getElementById("audio");
+const songCards = document.getElementById("songCards");
+let currentIndex = 0;
+let isPlaying = false;
 
-    <div class="song-card">
-      <h3>Hum Tere Pyar mein</h3>
-      <audio controls><source src="Hum Tere Pyar mein.mp3" type="audio/mpeg"></audio>
-    </div>
+function createVisualizer(parent) {
+  const vis = document.createElement("div");
+  vis.className = "visualizer";
+  for (let i=0;i<12;i++){
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.style.transform = `rotate(${i*30}deg) translateX(20px)`;
+    bar.style.animationDelay = `${i*0.1}s`;
+    vis.appendChild(bar);
+  }
+  parent.appendChild(vis);
+}
 
-    <div class="song-card">
-      <h3>Itna Na Mujhse Tu Pyaar Badha</h3>
-      <audio controls><source src="Itna Na Mujhse Tu Pyaar Badha.mp3" type="audio/mpeg"></audio>
-    </div>
+songs.forEach((song, index) => {
+  const card = document.createElement("div");
+  card.className = "card";
 
-    <div class="song-card">
-      <h3>Labon Ko</h3>
-      <audio controls><source src="Labon Ko.mp3" type="audio/mpeg"></audio>
-    </div>
+  const playWrapper = document.createElement("div");
+  playWrapper.className = "play-btn-wrapper";
 
-    <div class="song-card">
-      <h3>Mere Samnewali Khidki Mein</h3>
-      <audio controls><source src="Mere Samnewali Khidki Mein.mp3" type="audio/mpeg"></audio>
-    </div>
+  const playBtn = document.createElement("button");
+  playBtn.className = "play-btn";
+  playBtn.addEventListener("click", () => {
+    if (currentIndex === index && isPlaying) {
+      pauseMusic(playBtn);
+    } else {
+      loadSong(index, playBtn);
+    }
+  });
 
-    <div class="song-card">
-      <h3>O Re Piya</h3>
-      <audio controls><source src="O Re Piya.mp3" type="audio/mpeg"></audio>
-    </div>
+  createVisualizer(playWrapper);
 
-    <div class="song-card">
-      <h3>Sanson Ki Mala Pe</h3>
-      <audio controls><source src="Sanson Ki Mala Pe.mp3" type="audio/mpeg"></audio>
-    </div>
+  const songName = document.createElement("div");
+  songName.className = "song-name";
+  songName.textContent = song.replace(".mp3", "");
 
-    <div class="song-card">
-      <h3>saudebaazi</h3>
-      <audio controls><source src="saudebaazi.mp3" type="audio/mpeg"></audio>
-    </div>
+  const progressContainer = document.createElement("div");
+  progressContainer.className = "progress-container";
+  const progress = document.createElement("div");
+  progress.className = "progress";
+  progressContainer.appendChild(progress);
 
-    <div class="song-card">
-      <h3>Toota Jo Kabhi Tara</h3>
-      <audio controls><source src="Toota Jo Kabhi Tara.mp3" type="audio/mpeg"></audio>
-    </div>
+  const controls = document.createElement("div");
+  controls.className = "controls";
+  const downloadBtn = document.createElement("button");
+  downloadBtn.className = "download-btn";
+  downloadBtn.textContent = "Download";
+  downloadBtn.addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.href = song;
+    link.download = song;
+    link.click();
+  });
+  controls.appendChild(downloadBtn);
 
-    <div class="song-card">
-      <h3>Tu Hi Haqeeqat</h3>
-      <audio controls><source src="Tu Hi Haqeeqat.mp3" type="audio/mpeg"></audio>
-    </div>
+  playWrapper.appendChild(playBtn);
+  card.appendChild(playWrapper);
+  card.appendChild(songName);
+  card.appendChild(progressContainer);
+  card.appendChild(controls);
 
-  </div>
+  songCards.appendChild(card);
 
-  <footer>Made with ❤️ by Akash</footer>
+  // save elements for updating progress
+  song.progressEl = progress;
+  song.playBtnEl = playBtn;
+});
+
+function loadSong(index, btn) {
+  currentIndex = index;
+  audio.src = songs[index];
+  audio.play();
+  isPlaying = true;
+
+  updatePlayButtons();
+}
+
+function pauseMusic(btn) {
+  audio.pause();
+  isPlaying = false;
+  updatePlayButtons();
+}
+
+function updatePlayButtons() {
+  songs.forEach((song, idx) => {
+    if (idx === currentIndex && isPlaying) {
+      song.playBtnEl.style.background = "var(--accent-color)";
+    } else {
+      song.playBtnEl.style.background = "var(--accent-color)";
+    }
+  });
+}
+
+audio.addEventListener("timeupdate", () => {
+  const song = songs[currentIndex];
+  const progressPercent = (audio.currentTime / audio.duration) * 100;
+  if (song && song.progressEl) song.progressEl.style.width = progressPercent + "%";
+});
+
+audio.addEventListener("ended", () => {
+  currentIndex = (currentIndex + 1) % songs.length;
+  loadSong(currentIndex);
+});
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
+</script>
+
 </body>
 </html>
