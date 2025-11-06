@@ -6,69 +6,87 @@
 <title>Akash Vibes 🎵</title>
 <style>
 :root {
-  --bg-color: #ffffff;
-  --text-color: #111;
-  --card-color: #f2f2f2;
-  --accent-color: #007aff;
+  --bg: #f7f7f7;
+  --text: #111;
+  --card: #fff;
+  --accent: #007bff;
 }
 body.dark {
-  --bg-color: #0e0e0e;
-  --text-color: #fff;
-  --card-color: #1c1c1c;
-  --accent-color: #00b7ff;
+  --bg: #0e0e0e;
+  --text: #fff;
+  --card: #1c1c1c;
+  --accent: #00b7ff;
 }
 body {
-  margin: 0;
   font-family: "Poppins", sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.5s, color 0.5s;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  transition: background 0.4s, color 0.4s;
 }
 header {
+  text-align: center;
   font-size: 2rem;
   font-weight: 600;
-  text-align: center;
   padding: 15px;
-  letter-spacing: 1px;
-  background: var(--card-color);
+  background: var(--card);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
+
+/* Search Bar */
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+#search {
+  width: 85%;
+  max-width: 400px;
+  padding: 10px 15px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+#search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+/* Theme toggle */
 .theme-toggle {
   position: fixed;
   top: 15px;
   right: 15px;
-  background: var(--card-color);
-  color: var(--text-color);
+  background: var(--card);
+  color: var(--text);
   border: none;
   border-radius: 12px;
   padding: 6px 12px;
   cursor: pointer;
-  transition: all 0.3s;
   z-index: 100;
 }
 .theme-toggle:hover {
-  background: var(--accent-color);
+  background: var(--accent);
   color: white;
 }
 
-/* Library Screen */
+/* Library */
 #library {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 10px;
-  gap: 15px;
-  max-height: calc(100vh - 70px);
-  overflow-y: auto;
+  padding-bottom: 70px;
 }
-
-/* Song Card */
 .song-card {
-  background: var(--card-color);
-  width: 95%;
+  background: var(--card);
+  width: 90%;
   max-width: 450px;
   padding: 15px 20px;
   border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  margin: 8px 0;
   cursor: pointer;
   transition: transform 0.2s, background 0.3s;
 }
@@ -77,46 +95,45 @@ header {
   background: rgba(0,0,0,0.05);
 }
 
-/* Song Detail Screen */
+/* Player Screen */
 #detail {
   display: none;
   flex-direction: column;
   align-items: center;
-  padding: 20px 10px;
-}
-
-.song-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 5px;
   text-align: center;
+  padding: 20px;
+}
+.song-title {
+  font-size: 1.7rem;
+  font-weight: 600;
 }
 .song-meta {
   font-size: 0.9rem;
   color: #555;
-  margin-bottom: 15px;
-  text-align: center;
+  margin-bottom: 10px;
 }
 .song-image {
-  width: 80%;
-  max-width: 300px;
+  width: 75%;
+  max-width: 280px;
   border-radius: 20px;
-  filter: brightness(1.2);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   margin-bottom: 15px;
 }
 audio {
   width: 90%;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
-.download-btn, .back-btn {
-  margin-top: 8px;
-  background: var(--accent-color);
-  color: #fff;
+button {
   border: none;
   border-radius: 8px;
   padding: 8px 15px;
+  color: white;
+  background: var(--accent);
   cursor: pointer;
+  margin: 5px;
+}
+button:hover {
+  opacity: 0.9;
 }
 </style>
 </head>
@@ -125,35 +142,41 @@ audio {
 <button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
 <header>🎧 Akash Vibes</header>
 
-<!-- Library Screen -->
+<!-- Search -->
+<div class="search-container">
+  <input type="text" id="search" placeholder="Search songs... 🔍">
+</div>
+
+<!-- Library -->
 <div id="library"></div>
 
-<!-- Song Detail Screen -->
+<!-- Detail -->
 <div id="detail">
   <div class="song-title" id="songTitle"></div>
   <div class="song-meta" id="songMeta"></div>
-  <img src="audio.jpg" alt="Audio Cover" class="song-image">
+  <img src="audio.jpg" class="song-image">
   <audio id="audio" controls></audio>
-  <button class="download-btn" id="downloadBtn">Download</button>
-  <button class="back-btn" onclick="backToLibrary()">Back</button>
+  <button id="downloadBtn">Download</button>
+  <button onclick="backToLibrary()">Back</button>
 </div>
 
 <script>
 const songs = [
-  {file: "Aaj se teri.mp3", title: "Aaj Se Teri", singer: "Arijit Singh", composer: "Amit Trivedi", lyricist: "Kausar Munir", movie: "PadMan (2018)"},
-  {file: "Apa Fer Milange.mp3", title: "Apa Fer Milange", singer: "Savi Kahlon", composer: "The Masterz", lyricist: "Savi Kahlon", movie: "Single / Punjabi"},
-  {file: "Bulleya.mp3", title: "Bulleya", singer: "Amit Mishra & Shilpa Rao", composer: "Pritam", lyricist: "Amitabh Bhattacharya", movie: "Ae Dil Hai Mushkil (2016)"},
-  {file: "Dekha ek khwab.mp3", title: "Dekha Ek Khwab", singer: "Kishore Kumar & Lata Mangeshkar", composer: "Shiv‑Hari", lyricist: "Javed Akhtar", movie: "Silsila (1981)"},
-  {file: "Falak Tak Chal Sath Mere.mp3", title: "Falak Tak Chal Sath Mere", singer: "Udit Narayan & Mahalaxmi Iyer", composer: "Vishal‑Shekhar", lyricist: "Kausar Munir", movie: "Tashan (2008)"},
-  {file: "Hum Tere Pyar mein.mp3", title: "Hum Tere Pyar Mein", singer: "Lata Mangeshkar", composer: "Shankar‑Jaikishan", lyricist: "Hasrat Jaipuri", movie: "Dil Ek Mandir (1963)"},
-  {file: "Itna Na Mujhse Tu Pyaar Badha.mp3", title: "Itna Na Mujhse Tu Pyaar Badha", singer: "Lata Mangeshkar & Talat Mahmood", composer: "Salil Chowdhary", lyricist: "Rajendra Krishan", movie: "Chhaya (?)"},
-  {file: "Labon Ko.mp3", title: "Labon Ko", singer: "K.K.", composer: "Pritam", lyricist: "Sayeed Quadri", movie: "Bhool Bhulaiyaa (2007)"},
-  {file: "Mere Samnewali Khidki Mein.mp3", title: "Mere Samnewali Khidki Mein", singer: "Kishore Kumar", composer: "R.D. Burman", lyricist: "Rajendra Krishan", movie: "Padosan (1968)"},
-  {file: "O Re Piya.mp3", title: "O Re Piya", singer: "Rahat Fateh Ali Khan", composer: "Salim‑Sulaiman", lyricist: "Jaideep Sahni & Piyush Mishra", movie: "Aaja Nachle (2007)"},
-  {file: "Sanson Ki Mala Pe.mp3", title: "Sanson Ki Mala Pe", singer: "Nusrat Fateh Ali Khan", composer: "—", lyricist: "Meera Bai / Tufail Hoshiarpuri", movie: "Non‑movie devotional / qawwali"},
-  {file: "saudebaazi.mp3", title: "Saude Bazi", singer: "Anupam Amod", composer: "Pritam", lyricist: "Irshad Kamil", movie: "Aakrosh (2010)"},
-  {file: "Toota Jo Kabhi Tara.mp3", title: "Toota Jo Kabhi Tara", singer: "Atif Aslam & others", composer: "Sachin‑Jigar", lyricist: "Priya Saraiya", movie: "A Flying Jatt (2016)"},
-  {file: "Tu Hi Haqeeqat.mp3", title: "Tu Hi Haqeeqat", singer: "Javed Ali, Irshan Ashraf & Shadab", composer: "Pritam", lyricist: "Sayeed Quadri", movie: "Tum Mile (2009)"}
+  {file:"Raataan Lambiyan.mp3", title:"Raataan Lambiyan", singer:"Jubin Nautiyal", composer:"Tanishk Bagchi", movie:"Shershaah (2021)"},
+  {file:"Gulabi aakhen.mp3", title:"Gulabi Aakhen", singer:"Mohammed Rafi", composer:"R.D. Burman", movie:"The Train (1970)"},
+  {file:"Pee loon.mp3", title:"Pee Loon", singer:"Mohit Chauhan", composer:"Pritam", movie:"Once Upon A Time in Mumbaai (2010)"},
+  {file:"Channa mereya.mp3", title:"Channa Mereya", singer:"Arijit Singh", composer:"Pritam", movie:"Ae Dil Hai Mushkil (2016)"},
+  {file:"Shayad.mp3", title:"Shayad", singer:"Arijit Singh", composer:"Pritam", movie:"Love Aaj Kal (2020)"},
+  {file:"Tu mile.mp3", title:"Tu Mile", singer:"Neeraj Shridhar", composer:"Pritam", movie:"Once Upon A Time in Mumbaai (2010)"},
+  {file:"Kesariya.mp3", title:"Kesariya", singer:"Arijit Singh", composer:"Pritam", movie:"Brahmāstra (2022)"},
+  {file:"Dilbar mere.mp3", title:"Dilbar Mere", singer:"Kishore Kumar", composer:"R.D. Burman", movie:"Satte Pe Satta (1982)"},
+  {file:"Saibo.mp3", title:"Saibo", singer:"Shreya Ghoshal & Tochi Raina", composer:"Sachin–Jigar", movie:"Shor In The City (2011)"},
+  {file:"Jeene laga hoon.mp3", title:"Jeene Laga Hoon", singer:"Atif Aslam", composer:"Sachin–Jigar", movie:"Ramaiya Vastavaiya (2013)"},
+  {file:"Kal Ho Na Ho.mp3", title:"Kal Ho Naa Ho", singer:"Sonu Nigam", composer:"Shankar–Ehsaan–Loy", movie:"Kal Ho Naa Ho (2003)"},
+  {file:"Muskurane.mp3", title:"Muskurane", singer:"Arijit Singh", composer:"Jeet Gannguli", movie:"CityLights (2014)"},
+  {file:"Ranjha.mp3", title:"Ranjha", singer:"Jasleen Royal & B Praak", composer:"Akhil Sachdeva", movie:"Shershaah (2021)"},
+  {file:"Samjhawan.mp3", title:"Samjhawan", singer:"Arijit Singh & Shreya Ghoshal", composer:"Sharib-Toshi", movie:"Humpty Sharma Ki Dulhania (2014)"},
+  {file:"O Re Piya.mp3", title:"O Re Piya", singer:"Rahat Fateh Ali Khan", composer:"Salim–Sulaiman", movie:"Aaja Nachle (2007)"}
 ];
 
 const library = document.getElementById('library');
@@ -162,43 +185,48 @@ const songTitle = document.getElementById('songTitle');
 const songMeta = document.getElementById('songMeta');
 const audio = document.getElementById('audio');
 const downloadBtn = document.getElementById('downloadBtn');
+const search = document.getElementById('search');
 
-songs.forEach((song, index)=>{
+songs.forEach((song, i) => {
   const card = document.createElement('div');
-  card.classList.add('song-card');
+  card.className = "song-card";
   card.textContent = song.title;
-  card.addEventListener('click', ()=>{
-    showDetail(index);
-  });
+  card.onclick = () => showDetail(i);
   library.appendChild(card);
 });
 
-function showDetail(index){
-  const s = songs[index];
+search.addEventListener('input', () => {
+  const query = search.value.toLowerCase();
+  document.querySelectorAll('.song-card').forEach(card => {
+    card.style.display = card.textContent.toLowerCase().includes(query) ? 'block' : 'none';
+  });
+});
+
+function showDetail(i){
+  const s = songs[i];
   songTitle.textContent = s.title;
-  songMeta.textContent = `Singer: ${s.singer} | Composer: ${s.composer} | Lyricist: ${s.lyricist} | Movie: ${s.movie}`;
+  songMeta.textContent = `🎤 ${s.singer} | 🎬 ${s.movie}`;
   audio.src = s.file;
   audio.play();
-  downloadBtn.onclick = ()=> {
+  downloadBtn.onclick = () => {
     const a = document.createElement('a');
     a.href = s.file;
     a.download = s.file;
     a.click();
-  }
-  library.style.display = 'none';
-  detail.style.display = 'flex';
+  };
+  library.style.display = "none";
+  detail.style.display = "flex";
 }
 
 function backToLibrary(){
   audio.pause();
-  detail.style.display = 'none';
-  library.style.display = 'flex';
+  detail.style.display = "none";
+  library.style.display = "flex";
 }
 
 function toggleTheme(){
   document.body.classList.toggle('dark');
 }
 </script>
-
 </body>
-</html>
+  </html>
