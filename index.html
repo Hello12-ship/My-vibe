@@ -1,261 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Music Lounge — Akash Vibes</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akash Vibes 🎵</title>
 <style>
-  :root{
-    --bg-light:#f7f7f7; --card-light:#fff; --text-light:#111; --muted-light:#666; --accent:#007aff;
-    --bg-dark:#0e0e0e; --card-dark:#141414; --text-dark:#f5f5f5; --muted-dark:#9aa6b2; --accent-dark:#00b7ff;
-    --radius:14px; --maxw:980px;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Poppins,Inter,system-ui,Arial; background:var(--bg-light); color:var(--text-light); transition:background .25s,color .25s}
-  body.dark{background:var(--bg-dark); color:var(--text-dark)}
-  .wrap{max-width:var(--maxw);margin:18px auto;padding:18px;display:grid;grid-template-columns:1fr 380px;gap:18px}
-  header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:10px}
-  h1{font-size:1.2rem;margin:0;letter-spacing:1px}
-  .top-controls{display:flex;gap:8px;align-items:center}
-  .theme-btn{background:transparent;border:1px solid rgba(0,0,0,0.08);padding:6px 10px;border-radius:10px;cursor:pointer;font-size:13px}
-  body.dark .theme-btn{border:1px solid rgba(255,255,255,0.06)}
-  /* SEARCH */
-  .search{grid-column:1/-1;display:flex;justify-content:center;margin:8px 0}
-  .search input{width:92%;max-width:600px;padding:12px 16px;border-radius:999px;border:1px solid rgba(0,0,0,0.08);outline:none;font-size:15px}
-  body.dark .search input{border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:var(--text-dark)}
-  /* LEFT: Library */
-  .library{padding:8px;display:flex;flex-direction:column;gap:12px;max-height:70vh;overflow:auto}
-  .card{background:var(--card-light);padding:12px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(10,10,25,0.06);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-  body.dark .card{background:var(--card-dark);box-shadow:0 6px 18px rgba(0,0,0,0.35)}
-  .card .left{display:flex;flex-direction:column;gap:4px}
-  .title{font-weight:600}
-  .singer{font-size:13px;color:var(--muted-light)}
-  body.dark .singer{color:var(--muted-dark)}
-  .card .meta{font-size:13px;color:var(--muted-light)}
-  /* RIGHT: Player / Info */
-  .panel{background:var(--card-light);padding:16px;border-radius:12px;box-shadow:0 8px 30px rgba(10,10,25,0.06);display:flex;flex-direction:column;gap:12px;align-items:stretch}
-  body.dark .panel{background:var(--card-dark);box-shadow:0 8px 30px rgba(0,0,0,0.35)}
-  .now-title{font-weight:700;font-size:1.1rem}
-  .now-sub{color:var(--muted-light);font-size:0.9rem}
-  audio{width:100%;margin-top:6px}
-  .controls{display:flex;gap:8px;justify-content:center;margin-top:6px}
-  .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;background:var(--accent);color:white;font-weight:600}
-  body.dark .btn{background:var(--accent-dark)}
-  .small{font-size:13px;color:var(--muted-light)}
-  .meta-list{font-size:13px;color:var(--muted-light);line-height:1.4}
-  /* responsive */
-  @media (max-width:900px){
-    .wrap{grid-template-columns:1fr; padding:12px}
-    .panel{order:-1}
-    .search input{width:94%}
-  }
+:root {
+  --bg-color: #ffffff;
+  --text-color: #111;
+  --card-color: #f2f2f2;
+  --accent-color: #007aff;
+}
+body.dark {
+  --bg-color: #0e0e0e;
+  --text-color: #fff;
+  --card-color: #1c1c1c;
+  --accent-color: #00b7ff;
+}
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.5s, color 0.5s;
+}
+header {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 15px;
+  letter-spacing: 1px;
+  background: var(--card-color);
+}
+.theme-toggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: var(--card-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 100;
+}
+.theme-toggle:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+/* Search bar */
+#search {
+  width: 90%;
+  max-width: 400px;
+  margin: 15px auto;
+  display: block;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Library */
+#library {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  gap: 15px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+/* Song Card */
+.song-card {
+  background: var(--card-color);
+  width: 95%;
+  max-width: 450px;
+  padding: 15px 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+.song-card:hover {
+  transform: scale(1.02);
+  background: rgba(0,0,0,0.05);
+}
+
+/* Detail */
+#detail {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px;
+}
+.song-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.song-meta {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+  text-align: center;
+}
+.song-image {
+  width: 80%;
+  max-width: 300px;
+  border-radius: 20px;
+  filter: brightness(1.2);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  margin-bottom: 15px;
+}
+audio {
+  width: 90%;
+  margin-bottom: 15px;
+}
+.download-btn, .back-btn {
+  margin-top: 8px;
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>– Music Lounge –</h1>
-      <div class="top-controls">
-        <div class="small">Total songs: <span id="totalCount">0</span></div>
-        <button class="theme-btn" id="themeBtn">Dark</button>
-      </div>
-    </header>
 
-    <div class="search">
-      <input id="search" placeholder="Search songs... (title / singer) — try 'Arijit' or 'Kesariya'">
-    </div>
+<button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
+<header>-Music Lounge ♪</header>
 
-    <!-- Library (left) -->
-    <div class="library" id="library"></div>
+<!-- Search Bar -->
+<input type="text" id="search" placeholder="Search songs...">
 
-    <!-- Player Panel (right) -->
-    <aside class="panel">
-      <div>
-        <div class="now-title" id="nowTitle">Select a song to play</div>
-        <div class="now-sub" id="nowSub">Artist • Movie</div>
-      </div>
+<!-- Library -->
+<div id="library"></div>
 
-      <div class="meta-list" id="metaList">Composer • Lyricist • Year</div>
-
-      <audio id="audio" controls></audio>
-
-      <div class="controls">
-        <button class="btn" id="prevBtn">⏮ Prev</button>
-        <button class="btn" id="playBtn">▶ Play</button>
-        <button class="btn" id="nextBtn">Next ⏭</button>
-      </div>
-
-      <div style="margin-top:8px" class="small">Tip: Minimize the browser to keep playing. Close tab to stop playback.</div>
-    </aside>
-  </div>
+<!-- Detail Screen -->
+<div id="detail">
+  <div class="song-title" id="songTitle"></div>
+  <div class="song-meta" id="songMeta"></div>
+  <img src="audio.jpg" alt="Audio Cover" class="song-image">
+  <audio id="audio" controls></audio>
+  <button class="download-btn" id="downloadBtn">Download</button>
+  <button class="back-btn" onclick="backToLibrary()">Back</button>
+</div>
 
 <script>
-/* ========== SONG LIST (43 files) ==========
-   Filenames must match exactly (as you provided).
-   For composer/lyricist/movie some fields filled where known; otherwise left '-'
-===========================================*/
 const songs = [
-  {file:"Raataan Lambiyan.mp3", title:"Raataan Lambiyan", singer:"Jubin Nautiyal", composer:"Tanishk Bagchi", lyricist:"N/A", movie:"Shershaah"},
-  {file:"Gulabi aakhen.mp3", title:"Gulabi Aankhen", singer:"Mohammed Rafi", composer:"R.D. Burman", lyricist:"Majrooh Sultanpuri", movie:"The Train"},
-  {file:"Pee loon.mp3", title:"Pee Loon", singer:"Mohit Chauhan", composer:"Pritam", lyricist:"Irshad Kamil", movie:"Once Upon A Time in Mumbaai"},
-  {file:"Channa mereya.mp3", title:"Channa Mereya", singer:"Arijit Singh", composer:"Pritam", lyricist:"Amitabh Bhattacharya", movie:"Ae Dil Hai Mushkil"},
-  {file:"Shayad.mp3", title:"Shayad", singer:"Arijit Singh", composer:"Pritam", lyricist:"Irshad Kamil", movie:"Love Aaj Kal"},
-  {file:"Tu mile.mp3", title:"Tu Mile", singer:"Neeraj Shridhar", composer:"Pritam", lyricist:"Sameer", movie:"Once Upon A Time in Mumbaai"},
-  {file:"Kesariya.mp3", title:"Kesariya", singer:"Arijit Singh", composer:"Pritam", lyricist:"Amitabh Bhattacharya", movie:"Brahmāstra"},
-  {file:"Dilbar mere.mp3", title:"Dilbar Mere", singer:"Kishore Kumar", composer:"R.D. Burman", lyricist:"Majrooh Sultanpuri", movie:"Satte Pe Satta"},
-  {file:"Saibo.mp3", title:"Saibo", singer:"Shreya Ghoshal & Tochi Raina", composer:"Sachin–Jigar", lyricist:"Amitabh Bhattacharya", movie:"Shor In The City"},
-  {file:"Jeene laga hoon.mp3", title:"Jeene Laga Hoon", singer:"Atif Aslam", composer:"Sachin–Jigar", lyricist:"Anvita Dutt Guptan", movie:"Ramaiya Vastavaiya"},
-  {file:"Dil kya kare.mp3", title:"Dil Kya Kare", singer:"Kishore Kumar", composer:"R.D. Burman", lyricist:"Anand Bakshi", movie:"Anand Aur Anand"},
-  {file:"Sajni.mp3", title:"Sajni", singer:"Arijit/Unknown", composer:"-", lyricist:"-", movie:"-"},
-  {file:"Kal Ho Na Ho.mp3", title:"Kal Ho Naa Ho", singer:"Sonu Nigam", composer:"Shankar–Ehsaan–Loy", lyricist:"Javed Akhtar", movie:"Kal Ho Naa Ho"},
-  {file:"Muskurane.mp3", title:"Muskurane", singer:"Arijit Singh", composer:"Jeet Gannguli", lyricist:"Sayeed Quadri", movie:"CityLights"},
-  {file:"Hothon se chun lo tum.mp3", title:"Hothon Se Chhu Lo Tum", singer:"Jagjit Singh", composer:"-","lyricist":"-", movie:"Non-film/ghazal"},
-  {file:"Ranjha.mp3", title:"Ranjha", singer:"Jasleen Royal", composer:"Jasleen Royal", lyricist:"-","movie":"Shershaah"},
-  {file:"Tune jo na kaha.mp3", title:"Tune Jo Na Kaha", singer:"Mohit Chauhan", composer:"Pritam", lyricist:"Sameer", movie:"New Unknown"},
-  {file:"Samjhawan.mp3", title:"Samjhawan", singer:"Arijit Singh", composer:"Sharib-Toshi", lyricist:"-","movie":"Humpty Sharma Ki Dulhania"},
-  {file:"Iktara.mp3", title:"Iktara", singer:"Kavita Seth", composer:"Amit Trivedi", lyricist:"Amitabh Bhattacharya", movie:"Wake Up Sid"},
-  {file:"Yeh di dewaana.mp3", title:"Yeh Dil Deewana", singer:"Sonu Nigam", composer:"Nadeem-Shravan", lyricist:"Sameer", movie:"Pardes"},
-  {file:"Tumsa koi pyara koi.mp3", title:"Tumsa Koi Pyara", singer:"Kumar Sanu", composer:"N/A", lyricist:"N/A", movie:"Main Khiladi Tu Anari"},
-  {file:"Chura liya h tune.mp3", title:"Chura Liya Hai Tumne", singer:"Asha Bhosle & Mohammed Rafi", composer:"R.D. Burman", lyricist:"Majrooh Sultanpuri", movie:"Yaadon Ki Baaraat"},
-  {file:"Sach keh rha h dewaana.mp3", title:"Sach Keh Raha Hoon Deewana", singer:"KK", composer:"-","lyricist":"-", movie:"-"},
-  {file:"Thoda thoda pyar.mp3", title:"Thoda Thoda Pyaar", singer:"Stebin Ben", composer:"-","lyricist":"-", movie:"-"},
-  {file:"Sun saathiya.mp3", title:"Sun Saathiya", singer:"Priya Saraiya", composer:"Sachin–Jigar", lyricist:"-","movie":"ABCD 2"},
-  {file:"Kho gaye ham kaha.mp3", title:"Kho Gaye Hum Kahan", singer:"Jasleen Royal", composer:"Amaal Mallik", lyricist:"-","movie":"Baar Baar Dekho"},
-  {file:"Mera dil bhi kitna pagal h.mp3", title:"Mera Dil Bhi Kitna Pagal Hai", singer:"Kumar Sanu", composer:"N/A", lyricist:"N/A", movie:"Saajan"},
-  {file:"Kaisa hua.mp3", title:"Kaisa Hua", singer:"Vishal Mishra", composer:"Vishal Mishra", lyricist:"-","movie":"Tadap?"},
-  {file:"Mere haath me.mp3", title:"Mere Haath Mein", singer:"Sonu Nigam", composer:"Pritam", lyricist:"Sayeed Quadri", movie:"Fanaa"},
-  {file:"Dekha hazaro dafa aapko.mp3", title:"Dekha Hazaaro Dafaa", singer:"Arijit Singh", composer:"Pritam", lyricist:"-","movie":"Rustom?"},
-  {file:"Lag ja gale.mp3", title:"Lag Ja Gale", singer:"Lata Mangeshkar", composer:"Madho Prasad? / -", lyricist:"Raja Mehdi Ali Khan", movie:"Woh Kaun Thi?"},
-  {file:"Jab koi baat.mp3", title:"Jab Koi Baat Bigad Jaye", singer:"Kumar Sanu", composer:"Jatin-Lalit", lyricist:"Anand Bakshi", movie:"Jurm"},
-  {file:"Aapke pyar mein.mp3", title:"Aap Ke Pyar Mein", singer:"Alka Yagnik", composer:"N/A", lyricist:"N/A", movie:"-"},
-  {file:"Dil ibadat.mp3", title:"Dil Ibaadat", singer:"KK", composer:"-","lyricist":"-", movie:"Tum Mile?"},
-  {file:"Ye wada rha.mp3", title:"Ye Wada Raha", singer:"Kishore Kumar", composer:"R.D. Burman", lyricist:"Anand Bakshi", movie:"-"},
-  {file:"Intezar.mp3", title:"Intezaar", singer:"Arijit Singh", composer:"Pritam", lyricist:"-","movie":"-"},
-  /* Additional previously-used list (from earlier code snippets) */
-  {file:"Aaj se teri.mp3", title:"Aaj Se Teri", singer:"Arijit Singh", composer:"Amit Trivedi", lyricist:"Kausar Munir", movie:"PadMan"},
-  {file:"Apa Fer Milange.mp3", title:"Apa Fer Milange", singer:"Savi Kahlon", composer:"The Masterz", lyricist:"Savi Kahlon", movie:"Single/Punjabi"},
-  {file:"Bulleya.mp3", title:"Bulleya", singer:"Amit Mishra & Shilpa Rao", composer:"Pritam", lyricist:"Amitabh Bhattacharya", movie:"Ae Dil Hai Mushkil"},
-  {file:"Dekha ek khwab.mp3", title:"Dekha Ek Khwab", singer:"Kishore Kumar & Lata Mangeshkar", composer:"Shiv-Hari", lyricist:"Javed Akhtar", movie:"Silsila"},
-  {file:"Falak Tak Chal Sath Mere.mp3", title:"Falak Tak Chal Sath Mere", singer:"Udit Narayan & Mahalaxmi Iyer", composer:"Vishal-Shekhar", lyricist:"Kausar Munir", movie:"Tashan"},
-  {file:"Hum Tere Pyar mein.mp3", title:"Hum Tere Pyar Mein", singer:"Lata Mangeshkar", composer:"Shankar-Jaikishan", lyricist:"Hasrat Jaipuri", movie:"Dil Ek Mandir"},
-  {file:"Itna Na Mujhse Tu Pyaar Badha.mp3", title:"Itna Na Mujhse Tu Pyaar Badha", singer:"Lata Mangeshkar & Talat Mahmood", composer:"Salil Chowdhary", lyricist:"Rajendra Krishan", movie:"-"},
-  {file:"Labon Ko.mp3", title:"Labon Ko", singer:"K.K.", composer:"Pritam", lyricist:"Sayeed Quadri", movie:"Bhool Bhulaiyaa"},
-  {file:"Mere Samnewali Khidki Mein.mp3", title:"Mere Samnewali Khidki Mein", singer:"Kishore Kumar", composer:"R.D. Burman", lyricist:"Rajendra Krishan", movie:"Padosan"},
-  {file:"O Re Piya.mp3", title:"O Re Piya", singer:"Rahat Fateh Ali Khan", composer:"Salim-Sulaiman", lyricist:"Jaideep Sahni", movie:"Aaja Nachle"}
+  {file: "Aaj se teri.mp3", title: "Aaj Se Teri", singer: "Arijit Singh"},
+  {file: "Apa Fer Milange.mp3", title: "Apa Fer Milange", singer: "Savi Kahlon"},
+  {file: "Bulleya.mp3", title: "Bulleya", singer: "Amit Mishra & Shilpa Rao"},
+  {file: "Dekha ek khwab.mp3", title: "Dekha Ek Khwab", singer: "Kishore Kumar & Lata Mangeshkar"},
+  {file: "Falak Tak Chal Sath Mere.mp3", title: "Falak Tak Chal Sath Mere", singer: "Udit Narayan & Mahalaxmi Iyer"},
+  {file: "Hum Tere Pyar mein.mp3", title: "Hum Tere Pyar Mein", singer: "Lata Mangeshkar"},
+  {file: "Itna Na Mujhse Tu Pyaar Badha.mp3", title: "Itna Na Mujhse Tu Pyaar Badha", singer: "Lata & Talat"},
+  {file: "Labon Ko.mp3", title: "Labon Ko", singer: "K.K."},
+  {file: "Mere Samnewali Khidki Mein.mp3", title: "Mere Samnewali Khidki Mein", singer: "Kishore Kumar"},
+  {file: "O Re Piya.mp3", title: "O Re Piya", singer: "Rahat Fateh Ali Khan"},
+  {file: "Sanson Ki Mala Pe.mp3", title: "Sanson Ki Mala Pe", singer: "Nusrat Fateh Ali Khan"},
+  {file: "saudebaazi.mp3", title: "Saude Bazi", singer: "Anupam Amod"},
+  {file: "Toota Jo Kabhi Tara.mp3", title: "Toota Jo Kabhi Tara", singer: "Atif Aslam"},
+  {file: "Tu Hi Haqeeqat.mp3", title: "Tu Hi Haqeeqat", singer: "Javed Ali"}
 ];
-/* ========================================= */
 
-const libraryEl = document.getElementById('library');
-const searchEl = document.getElementById('search');
-const totalCount = document.getElementById('totalCount');
-const audio = document.getElementById('audio');
-const nowTitle = document.getElementById('nowTitle');
-const nowSub = document.getElementById('nowSub');
-const metaList = document.getElementById('metaList');
-const playBtn = document.getElementById('playBtn');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const themeBtn = document.getElementById('themeBtn');
+const library = document.getElementById("library");
+const detail = document.getElementById("detail");
+const songTitle = document.getElementById("songTitle");
+const songMeta = document.getElementById("songMeta");
+const audio = document.getElementById("audio");
+const downloadBtn = document.getElementById("downloadBtn");
+const search = document.getElementById("search");
 
-let currentIndex = -1;
-let isPlaying = false;
+let currentIndex = 0;
 
-/* Build library UI */
-function buildLibrary(list){
-  libraryEl.innerHTML = '';
-  list.forEach((s, i) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    const left = document.createElement('div'); left.className='left';
-    const title = document.createElement('div'); title.className='title'; title.textContent = s.title;
-    const singer = document.createElement('div'); singer.className='singer'; singer.textContent = s.singer;
-    left.appendChild(title); left.appendChild(singer);
-    const right = document.createElement('div'); right.className='meta'; right.textContent = '';
-    card.appendChild(left); card.appendChild(right);
-    card.onclick = () => playIndexByObject(s);
-    libraryEl.appendChild(card);
+function loadSongs(list = songs) {
+  library.innerHTML = "";
+  list.forEach((song, i) => {
+    const card = document.createElement("div");
+    card.classList.add("song-card");
+    card.textContent = song.title;
+    card.addEventListener("click", () => showDetail(i, list));
+    library.appendChild(card);
   });
-  totalCount.textContent = list.length;
 }
+loadSongs();
 
-/* Play by object (find index) */
-function playIndexByObject(obj){
-  const idx = songs.findIndex(x=>x.file === obj.file);
-  if(idx !== -1) playIndex(idx);
-}
-
-/* Play index */
-function playIndex(i){
-  if(i < 0 || i >= songs.length) return;
-  currentIndex = i;
-  const s = songs[i];
+function showDetail(index, list = songs) {
+  currentIndex = songs.indexOf(list[index]);
+  const s = list[index];
+  songTitle.textContent = s.title;
+  songMeta.textContent = `Singer: ${s.singer}`;
   audio.src = s.file;
-  audio.play().catch(()=>{ /* autoplay blocked until user interacts */});
-  isPlaying = true;
-  playBtn.textContent = '⏸ Pause';
-  updateNowPlaying(s);
-  highlightActive();
+  audio.play();
+  downloadBtn.onclick = () => {
+    const a = document.createElement("a");
+    a.href = s.file;
+    a.download = s.file;
+    a.click();
+  };
+  library.style.display = "none";
+  detail.style.display = "flex";
 }
 
-/* Update now playing panel */
-function updateNowPlaying(s){
-  nowTitle.textContent = s.title;
-  nowSub.textContent = s.singer + (s.movie ? ' • ' + s.movie : '');
-  metaList.textContent = `Composer: ${s.composer || '-'}  •  Lyricist: ${s.lyricist || '-'}`
-}
-
-/* highlight active card */
-function highlightActive(){
-  const cards = document.querySelectorAll('.card');
-  cards.forEach((c, idx) => c.style.outline = (idx === currentIndex ? '2px solid rgba(0,123,255,0.15)' : 'none'));
-}
-
-/* Controls */
-playBtn.onclick = () => {
-  if(!audio.src){
-    playIndex(0); return;
-  }
-  if(isPlaying){ audio.pause(); isPlaying=false; playBtn.textContent='▶ Play'; }
-  else{ audio.play().catch(()=>{}); isPlaying=true; playBtn.textContent='⏸ Pause'; }
-};
-prevBtn.onclick = () => {
-  const prev = (currentIndex - 1 + songs.length) % songs.length;
-  playIndex(prev);
-};
-nextBtn.onclick = () => {
-  const next = (currentIndex + 1) % songs.length;
-  playIndex(next);
-};
-
-/* Auto next on end */
-audio.addEventListener('ended', ()=>{
-  const next = (currentIndex + 1) % songs.length;
-  playIndex(next);
+// Auto play next song
+audio.addEventListener("ended", () => {
+  currentIndex = (currentIndex + 1) % songs.length;
+  showDetail(currentIndex);
 });
 
-/* Search filter */
-searchEl.addEventListener('input', ()=>{
-  const q = searchEl.value.trim().toLowerCase();
-  const filtered = songs.filter(s => (s.title + ' ' + s.singer).toLowerCase().includes(q));
-  buildLibrary(filtered);
-});
+function backToLibrary() {
+  audio.pause();
+  detail.style.display = "none";
+  library.style.display = "flex";
+}
 
-/* Theme toggle */
-themeBtn.onclick = () => {
-  document.body.classList.toggle('dark');
-  themeBtn.textContent = document.body.classList.contains('dark') ? 'Light' : 'Dark';
-};
+// Dark/Light Mode
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
 
-/* initial build */
-buildLibrary(songs);
-themeBtn.textContent = 'Dark';
-
-/* keyboard shortcuts */
-document.addEventListener('keydown', (e)=>{
-  if(e.code === 'Space'){ e.preventDefault(); playBtn.click(); }
-  if(e.code === 'ArrowRight') nextBtn.click();
-  if(e.code === 'ArrowLeft') prevBtn.click();
+// Search songs
+search.addEventListener("input", (e) => {
+  const val = e.target.value.toLowerCase();
+  const filtered = songs.filter(s => s.title.toLowerCase().includes(val) || s.singer.toLowerCase().includes(val));
+  loadSongs(filtered);
 });
 </script>
 </body>
-                                                 </html>
+    </html>
