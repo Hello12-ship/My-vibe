@@ -55,8 +55,18 @@ header {
   align-items: center;
   padding: 20px 10px;
   gap: 15px;
-  max-height: calc(100vh - 70px);
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
+}
+.search-bar {
+  width: 90%;
+  max-width: 450px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  margin-bottom: 15px;
+  font-size: 1rem;
 }
 .song-card {
   background: var(--card-color);
@@ -117,6 +127,7 @@ footer {
   font-size: 0.9rem;
   background: var(--card-color);
   color: var(--text-color);
+  width: 100%;
   margin-top: 10px;
   border-top: 1px solid rgba(0,0,0,0.1);
 }
@@ -127,7 +138,9 @@ footer {
 <button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
 <header>🎧 Akash Vibes</header>
 
-<div id="library"></div>
+<div id="library">
+  <input type="text" class="search-bar" id="searchInput" placeholder="Search songs...">
+</div>
 
 <div id="detail">
   <div class="song-title" id="songTitle"></div>
@@ -138,19 +151,30 @@ footer {
   <button class="back-btn" onclick="backToLibrary()">Back</button>
 </div>
 
-<footer>Made with ❤️ by Akash</footer>
+<footer>🎶 Made by Akash 💫</footer>
 
 <script>
 const songs = [
-  {file: "Aaj se teri.mp3", title: "Aaj Se Teri", singer: "Arijit Singh", composer: "Amit Trivedi", movie: "PadMan"},
-  {file: "Apa Fer Milange.mp3", title: "Apa Fer Milange", singer: "Savi Kahlon", composer: "The Masterz", movie: "Punjabi"},
-  {file: "Bulleya.mp3", title: "Bulleya", singer: "Amit Mishra", composer: "Pritam", movie: "ADHM"},
-  {file: "Toota Jo Kabhi Tara.mp3", title: "Toota Jo Kabhi Tara", singer: "Atif Aslam", composer: "Sachin-Jigar", movie: "A Flying Jatt"},
-  {file: "Labon Ko.mp3", title: "Labon Ko", singer: "K.K.", composer: "Pritam", movie: "Bhool Bhulaiyaa"},
-  {file: "O Re Piya.mp3", title: "O Re Piya", singer: "Rahat Fateh Ali Khan", composer: "Salim-Sulaiman", movie: "Aaja Nachle"},
-  {file: "Dekha ek khwab.mp3", title: "Dekha Ek Khwab", singer: "Kishore Kumar", composer: "Shiv-Hari", movie: "Silsila"},
-  {file: "Falak Tak Chal Sath Mere.mp3", title: "Falak Tak Chal Sath Mere", singer: "Udit Narayan", composer: "Vishal-Shekhar", movie: "Tashan"},
-  {file: "Tu Hi Haqeeqat.mp3", title: "Tu Hi Haqeeqat", singer: "Javed Ali", composer: "Pritam", movie: "Tum Mile"}
+  {file: "Aaj se teri.mp3", title: "Aaj Se Teri", singer: "Arijit Singh", composer: "Amit Trivedi", lyricist: "Kausar Munir", movie: "PadMan (2018)"},
+  {file: "Apa Fer Milange.mp3", title: "Apa Fer Milange", singer: "Savi Kahlon", composer: "The Masterz", lyricist: "Savi Kahlon", movie: "Single / Punjabi"},
+  {file: "Bulleya.mp3", title: "Bulleya", singer: "Amit Mishra & Shilpa Rao", composer: "Pritam", lyricist: "Amitabh Bhattacharya", movie: "Ae Dil Hai Mushkil (2016)"},
+  {file: "Falak Tak Chal Sath Mere.mp3", title: "Falak Tak Chal Sath Mere", singer: "Udit Narayan & Mahalaxmi Iyer", composer: "Vishal-Shekhar", lyricist: "Kausar Munir", movie: "Tashan (2008)"},
+  {file: "Raataan Lambiyan.mp3", title: "Raataan Lambiyan", singer: "Jubin Nautiyal", composer: "Tanishk Bagchi", lyricist: "Tanishk Bagchi", movie: "Shershaah (2021)"},
+  {file: "Gulabi Aakhen.mp3", title: "Gulabi Aakhen", singer: "Mohammad Rafi", composer: "R.D. Burman", lyricist: "Anand Bakshi", movie: "The Train (1970)"},
+  {file: "Pee Loon.mp3", title: "Pee Loon", singer: "Mohit Chauhan", composer: "Pritam", lyricist: "Irshad Kamil", movie: "Once Upon A Time In Mumbaai (2010)"},
+  {file: "Channa Mereya.mp3", title: "Channa Mereya", singer: "Arijit Singh", composer: "Pritam", lyricist: "Amitabh Bhattacharya", movie: "Ae Dil Hai Mushkil (2016)"},
+  {file: "Shayad.mp3", title: "Shayad", singer: "Arijit Singh", composer: "Pritam", lyricist: "Irshad Kamil", movie: "Love Aaj Kal (2020)"},
+  {file: "Kesariya.mp3", title: "Kesariya", singer: "Arijit Singh", composer: "Pritam", lyricist: "Amitabh Bhattacharya", movie: "Brahmastra (2022)"},
+  {file: "Saibo.mp3", title: "Saibo", singer: "Shreya Ghoshal", composer: "Sachin-Jigar", lyricist: "Sameer", movie: "Shor In The City (2011)"},
+  {file: "Jeene Laga Hoon.mp3", title: "Jeene Laga Hoon", singer: "Atif Aslam", composer: "Sachin-Jigar", lyricist: "Priya Saraiya", movie: "Ramaiya Vastavaiya (2013)"},
+  {file: "Sajni.mp3", title: "Sajni", singer: "Armaan Malik", composer: "Amit Trivedi", lyricist: "Kausar Munir", movie: "Laapata Ladies (2024)"},
+  {file: "Kal Ho Na Ho.mp3", title: "Kal Ho Na Ho", singer: "Sonu Nigam", composer: "Shankar-Ehsaan-Loy", lyricist: "Javed Akhtar", movie: "Kal Ho Naa Ho (2003)"},
+  {file: "Muskurane.mp3", title: "Muskurane", singer: "Arijit Singh", composer: "Jeet Gannguli", lyricist: "Rashmi Singh", movie: "CityLights (2014)"},
+  {file: "Ranjha.mp3", title: "Ranjha", singer: "Jasleen Royal", composer: "Akhil Sachdeva", lyricist: "Anvita Dutt", movie: "Shershaah (2021)"},
+  {file: "Thoda Thoda Pyaar.mp3", title: "Thoda Thoda Pyaar", singer: "Stebin Ben", composer: "Nilesh Ahuja", lyricist: "Kumaar", movie: "Single (2021)"},
+  {file: "Dil Ibadat.mp3", title: "Dil Ibadat", singer: "K.K.", composer: "Pritam", lyricist: "Sayeed Quadri", movie: "Tum Mile (2009)"},
+  {file: "Tune Jo Na Kaha.mp3", title: "Tune Jo Na Kaha", singer: "Mohit Chauhan", composer: "Pritam", lyricist: "Sayeed Quadri", movie: "New York (2009)"},
+  {file: "Tumsa Koi Pyaara.mp3", title: "Tumsa Koi Pyaara", singer: "Kumar Sanu", composer: "Nadeem-Shravan", lyricist: "Sameer", movie: "Kuch Kuch Hota Hai (1998)"}
 ];
 
 const library = document.getElementById('library');
@@ -159,44 +183,54 @@ const songTitle = document.getElementById('songTitle');
 const songMeta = document.getElementById('songMeta');
 const audio = document.getElementById('audio');
 const downloadBtn = document.getElementById('downloadBtn');
+const searchInput = document.getElementById('searchInput');
 
 let currentSong = null;
 
-songs.forEach((song, index)=>{
-  const card = document.createElement('div');
-  card.classList.add('song-card');
-  card.textContent = song.title;
-  card.addEventListener('click', ()=>{
-    playSong(index);
+function renderLibrary() {
+  library.querySelectorAll('.song-card').forEach(e => e.remove());
+  songs.forEach((song, index)=>{
+    const card = document.createElement('div');
+    card.classList.add('song-card');
+    card.textContent = song.title;
+    card.addEventListener('click', ()=> showDetail(index));
+    library.appendChild(card);
   });
-  library.appendChild(card);
-});
+}
 
-function playSong(index){
+renderLibrary();
+
+function showDetail(index){
   const s = songs[index];
   currentSong = index;
   songTitle.textContent = s.title;
-  songMeta.textContent = `🎤 ${s.singer} | 🎶 ${s.composer} | 🎬 ${s.movie}`;
+  songMeta.textContent = `Singer: ${s.singer} | Composer: ${s.composer} | Lyricist: ${s.lyricist} | Movie: ${s.movie}`;
   audio.src = s.file;
   audio.play();
-  library.style.display = 'none';
-  detail.style.display = 'flex';
   downloadBtn.onclick = ()=> {
     const a = document.createElement('a');
     a.href = s.file;
     a.download = s.file;
     a.click();
-  };
+  }
+  library.style.display = 'none';
+  detail.style.display = 'flex';
 }
 
-// autoplay next random song
 audio.addEventListener('ended', ()=>{
-  const randomIndex = Math.floor(Math.random() * songs.length);
-  playSong(randomIndex);
+  let randomIndex = Math.floor(Math.random() * songs.length);
+  showDetail(randomIndex);
+});
+
+searchInput.addEventListener('input', ()=>{
+  const value = searchInput.value.toLowerCase();
+  document.querySelectorAll('.song-card').forEach(card=>{
+    card.style.display = card.textContent.toLowerCase().includes(value) ? 'block' : 'none';
+  });
 });
 
 function backToLibrary(){
-  // music will continue playing
+  audio.pause();
   detail.style.display = 'none';
   library.style.display = 'flex';
 }
@@ -207,4 +241,4 @@ function toggleTheme(){
 </script>
 
 </body>
-  </html>
+</html>
