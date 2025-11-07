@@ -49,31 +49,15 @@ header {
   background: var(--accent-color);
   color: white;
 }
-
-/* Search bar */
-#search {
-  width: 90%;
-  max-width: 400px;
-  margin: 15px auto;
-  display: block;
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-
-/* Library */
 #library {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
+  padding: 20px 10px;
   gap: 15px;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 70px);
   overflow-y: auto;
 }
-
-/* Song Card */
 .song-card {
   background: var(--card-color);
   width: 95%;
@@ -88,8 +72,6 @@ header {
   transform: scale(1.02);
   background: rgba(0,0,0,0.05);
 }
-
-/* Detail */
 #detail {
   display: none;
   flex-direction: column;
@@ -129,32 +111,24 @@ audio {
   padding: 8px 15px;
   cursor: pointer;
 }
-  footer {
+footer {
   text-align: center;
   padding: 10px 0;
   font-size: 0.9rem;
   background: var(--card-color);
   color: var(--text-color);
-  position: relative;
-  bottom: 0;
-  width: 100%;
   margin-top: 10px;
   border-top: 1px solid rgba(0,0,0,0.1);
-  }
+}
 </style>
 </head>
 <body>
 
 <button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
-<header>-Music Lounge ♪</header>
+<header>🎧 Akash Vibes</header>
 
-<!-- Search Bar -->
-<input type="text" id="search" placeholder="Search songs...">
-
-<!-- Library -->
 <div id="library"></div>
 
-<!-- Detail Screen -->
 <div id="detail">
   <div class="song-title" id="songTitle"></div>
   <div class="song-meta" id="songMeta"></div>
@@ -164,89 +138,73 @@ audio {
   <button class="back-btn" onclick="backToLibrary()">Back</button>
 </div>
 
+<footer>Made with ❤️ by Akash</footer>
+
 <script>
 const songs = [
-  {file: "Aaj se teri.mp3", title: "Aaj Se Teri", singer: "Arijit Singh"},
-  {file: "Apa Fer Milange.mp3", title: "Apa Fer Milange", singer: "Savi Kahlon"},
-  {file: "Bulleya.mp3", title: "Bulleya", singer: "Amit Mishra & Shilpa Rao"},
-  {file: "Dekha ek khwab.mp3", title: "Dekha Ek Khwab", singer: "Kishore Kumar & Lata Mangeshkar"},
-  {file: "Falak Tak Chal Sath Mere.mp3", title: "Falak Tak Chal Sath Mere", singer: "Udit Narayan & Mahalaxmi Iyer"},
-  {file: "Hum Tere Pyar mein.mp3", title: "Hum Tere Pyar Mein", singer: "Lata Mangeshkar"},
-  {file: "Itna Na Mujhse Tu Pyaar Badha.mp3", title: "Itna Na Mujhse Tu Pyaar Badha", singer: "Lata & Talat"},
-  {file: "Labon Ko.mp3", title: "Labon Ko", singer: "K.K."},
-  {file: "Mere Samnewali Khidki Mein.mp3", title: "Mere Samnewali Khidki Mein", singer: "Kishore Kumar"},
-  {file: "O Re Piya.mp3", title: "O Re Piya", singer: "Rahat Fateh Ali Khan"},
-  {file: "Sanson Ki Mala Pe.mp3", title: "Sanson Ki Mala Pe", singer: "Nusrat Fateh Ali Khan"},
-  {file: "saudebaazi.mp3", title: "Saude Bazi", singer: "Anupam Amod"},
-  {file: "Toota Jo Kabhi Tara.mp3", title: "Toota Jo Kabhi Tara", singer: "Atif Aslam"},
-  {file: "Tu Hi Haqeeqat.mp3", title: "Tu Hi Haqeeqat", singer: "Javed Ali"}
+  {file: "Aaj se teri.mp3", title: "Aaj Se Teri", singer: "Arijit Singh", composer: "Amit Trivedi", movie: "PadMan"},
+  {file: "Apa Fer Milange.mp3", title: "Apa Fer Milange", singer: "Savi Kahlon", composer: "The Masterz", movie: "Punjabi"},
+  {file: "Bulleya.mp3", title: "Bulleya", singer: "Amit Mishra", composer: "Pritam", movie: "ADHM"},
+  {file: "Toota Jo Kabhi Tara.mp3", title: "Toota Jo Kabhi Tara", singer: "Atif Aslam", composer: "Sachin-Jigar", movie: "A Flying Jatt"},
+  {file: "Labon Ko.mp3", title: "Labon Ko", singer: "K.K.", composer: "Pritam", movie: "Bhool Bhulaiyaa"},
+  {file: "O Re Piya.mp3", title: "O Re Piya", singer: "Rahat Fateh Ali Khan", composer: "Salim-Sulaiman", movie: "Aaja Nachle"},
+  {file: "Dekha ek khwab.mp3", title: "Dekha Ek Khwab", singer: "Kishore Kumar", composer: "Shiv-Hari", movie: "Silsila"},
+  {file: "Falak Tak Chal Sath Mere.mp3", title: "Falak Tak Chal Sath Mere", singer: "Udit Narayan", composer: "Vishal-Shekhar", movie: "Tashan"},
+  {file: "Tu Hi Haqeeqat.mp3", title: "Tu Hi Haqeeqat", singer: "Javed Ali", composer: "Pritam", movie: "Tum Mile"}
 ];
 
-const library = document.getElementById("library");
-const detail = document.getElementById("detail");
-const songTitle = document.getElementById("songTitle");
-const songMeta = document.getElementById("songMeta");
-const audio = document.getElementById("audio");
-const downloadBtn = document.getElementById("downloadBtn");
-const search = document.getElementById("search");
+const library = document.getElementById('library');
+const detail = document.getElementById('detail');
+const songTitle = document.getElementById('songTitle');
+const songMeta = document.getElementById('songMeta');
+const audio = document.getElementById('audio');
+const downloadBtn = document.getElementById('downloadBtn');
 
-let currentIndex = 0;
+let currentSong = null;
 
-function loadSongs(list = songs) {
-  library.innerHTML = "";
-  list.forEach((song, i) => {
-    const card = document.createElement("div");
-    card.classList.add("song-card");
-    card.textContent = song.title;
-    card.addEventListener("click", () => showDetail(i, list));
-    library.appendChild(card);
+songs.forEach((song, index)=>{
+  const card = document.createElement('div');
+  card.classList.add('song-card');
+  card.textContent = song.title;
+  card.addEventListener('click', ()=>{
+    playSong(index);
   });
-}
-loadSongs();
+  library.appendChild(card);
+});
 
-function showDetail(index, list = songs) {
-  currentIndex = songs.indexOf(list[index]);
-  const s = list[index];
+function playSong(index){
+  const s = songs[index];
+  currentSong = index;
   songTitle.textContent = s.title;
-  songMeta.textContent = `Singer: ${s.singer}`;
+  songMeta.textContent = `🎤 ${s.singer} | 🎶 ${s.composer} | 🎬 ${s.movie}`;
   audio.src = s.file;
   audio.play();
-  downloadBtn.onclick = () => {
-    const a = document.createElement("a");
+  library.style.display = 'none';
+  detail.style.display = 'flex';
+  downloadBtn.onclick = ()=> {
+    const a = document.createElement('a');
     a.href = s.file;
     a.download = s.file;
     a.click();
   };
-  library.style.display = "none";
-  detail.style.display = "flex";
 }
 
-// Auto play next song
-audio.addEventListener("ended", () => {
-  currentIndex = (currentIndex + 1) % songs.length;
-  showDetail(currentIndex);
+// autoplay next random song
+audio.addEventListener('ended', ()=>{
+  const randomIndex = Math.floor(Math.random() * songs.length);
+  playSong(randomIndex);
 });
 
-function backToLibrary() {
-  audio.pause();
-  detail.style.display = "none";
-  library.style.display = "flex";
+function backToLibrary(){
+  // music will continue playing
+  detail.style.display = 'none';
+  library.style.display = 'flex';
 }
 
-// Dark/Light Mode
-function toggleTheme() {
-  document.body.classList.toggle("dark");
+function toggleTheme(){
+  document.body.classList.toggle('dark');
 }
-
-// Search songs
-search.addEventListener("input", (e) => {
-  const val = e.target.value.toLowerCase();
-  const filtered = songs.filter(s => s.title.toLowerCase().includes(val) || s.singer.toLowerCase().includes(val));
-  loadSongs(filtered);
-});
 </script>
-  <footer>web developer - Akash
-  song suggestor - Jaydev
-  </footer>
+
 </body>
-    </html>
+  </html>
