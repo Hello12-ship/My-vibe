@@ -304,6 +304,14 @@ function toggleTheme(){
   document.body.classList.toggle('dark');
 }
 </script>
+  
+  <script>
+// prevent reload on back button silently
+window.history.pushState(null, null, window.location.href);
+window.onpopstate = function () {
+  window.history.pushState(null, null, window.location.href);
+};
+  </script>
 
 </body>
 </html>
