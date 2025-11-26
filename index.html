@@ -162,6 +162,14 @@ footer {
 <body>
 
 <button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
+  <p id="totalCount" style="
+  position: fixed;
+  top: 60px;
+  right: 15px;
+  font-size: 12px;
+  opacity: 0.6;
+  margin: 0;
+"></p>
 <header>𝓜𝓾𝓼𝓲𝓬 𝐿𝓸𝓊𝓷𝓰𝑒</header>
 
 <div id="library">
@@ -300,6 +308,7 @@ function renderLibrary() {
 }
 
 renderLibrary();
+  document.getElementById("totalCount").textContent = `${songs.length} Songs`;
 
 function showDetail(index){
   const s = songs[index];
