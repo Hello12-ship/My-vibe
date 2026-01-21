@@ -2,392 +2,699 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akash Vibes 🎵</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Akash Vibes Premium</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap');
+
 :root {
-  --bg-color: #ffffff;
-  --text-color: #111;
-  --card-color: #f2f2f2;
-  --accent-color: #007aff;
+    --bg: #f8f9fa;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-sub: #868e96;
+    --accent: #4361ee;
+    --accent-glow: rgba(67, 97, 238, 0.3);
+    --border: #e9ecef;
+    --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 body.dark {
-  --bg-color: #0e0e0e;
-  --text-color: #fff;
-  --card-color: #1c1c1c;
-  --accent-color: #00b7ff;
+    --bg: #0f1115;
+    --surface: #181a1f;
+    --text: #ffffff;
+    --text-sub: #a0a0a0;
+    --accent: #4cc9f0;
+    --accent-glow: rgba(76, 201, 240, 0.3);
+    --border: #2a2d35;
 }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+
 body {
-  margin: 0;
-  font-family: "Segoe UI", cursive;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background 0.9s, color 0.9s;
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: background 0.4s var(--ease-smooth), color 0.4s;
 }
+
+/* --- HEADER --- */
 header {
-  font-size: 2rem;
-  font-weight: 600;
-  text-align: center;
-  padding: 15px;
-  letter-spacing: 1px;
-  background: var(--card-color);
+    padding: 16px 20px;
+    background: var(--surface);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 50;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
 }
-.theme-toggle {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  background: var(--card-color);
-  color: var(--text-color);
-  border: none;
-  border-radius: 12px;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: all 0.9s;
-  z-index: 100;
-}
-.theme-toggle:hover {
-  background: var(--accent-color);
-  color: white;
+.brand { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; }
+.brand span { color: var(--accent); }
+
+.badge-count {
+    font-size: 0.75rem;
+    background: var(--accent);
+    color: var(--surface);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    margin-left: 10px;
+    box-shadow: 0 4px 10px var(--accent-glow);
 }
 
-#library {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 10px;
-  gap: 15px;
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-}
-
-.search-bar {
-  width: 90%;
-  max-width: 450px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  outline: none;
-  margin-bottom: 15px;
-  font-size: 1rem;
-}
-
-/* FINAL SMOOTH HOVER ANIMATION */
-.song-card {
-    padding: 12px 18px;
-    width: 90%;
-    max-width: 450px;
-    background: var(--card-color);
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    text-align: center;
+.theme-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: transform 0.90s ease, box-shadow 0.90s ease, background 0.90s ease;
+    transition: transform 0.2s var(--ease-elastic);
 }
-.song-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-    background: rgba(0,0,0,0.08);
+.theme-btn:active { transform: scale(0.85); }
+
+/* --- TABS --- */
+.tabs {
+    display: flex;
+    background: var(--surface);
+    padding: 5px;
+    margin: 10px 15px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-sub);
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-smooth);
+}
+.tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 15px var(--accent-glow);
 }
 
-.fade {
-    animation: fadeIn 0.8s ease;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px);}
-    to { opacity: 1; transform: translateY(0);}
-}
-
-#detail {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px 10px;
-  animation: pop 0.35s ease;
-}
-@keyframes pop {
-    0% { opacity: 0; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
+/* --- CONTENT AREA --- */
+.view-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden; /* For sliding effects */
 }
 
-.song-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 5px;
-  text-align: center;
-}
-.song-meta {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 15px;
-  text-align: center;
-}
-.song-image {
-  width: 80%;
-  max-width: 300px;
-  border-radius: 20px;
-  filter: brightness(1.2);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-  margin-bottom: 15px;
-}
-audio {
-  width: 90%;
-  margin-bottom: 15px;
-}
-.download-btn, .back-btn {
-  margin-top: 8px;
-  background: var(--accent-color);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 15px;
-  cursor: pointer;
+.content-area {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    padding: 0 15px 100px 15px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: all 0.4s var(--ease-smooth);
 }
 
-footer {
-  text-align: center;
-  padding: 10px 0;
-  font-size: 0.9rem;
-  background: var(--card-color);
-  color: var(--text-color);
-  width: 100%;
-  margin-top: 10px;
-  border-top: 1px solid rgba(0,0,0,0.1);
+.content-area.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    z-index: 10;
 }
+
+.search-box {
+    width: 100%;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    margin: 10px 0 20px 0;
+    outline: none;
+    font-family: inherit;
+    transition: 0.3s;
+    font-size: 0.95rem;
+}
+.search-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+/* --- CARDS --- */
+.card {
+    background: var(--surface);
+    padding: 12px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: transform 0.2s var(--ease-elastic), background 0.2s;
+    /* Stagger Animation Default */
+    opacity: 0; animation: slideInUp 0.5s forwards;
+}
+@keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+.card:active { transform: scale(0.95); background: var(--bg); }
+
+.card-info { flex: 1; padding: 0 12px; overflow: hidden; }
+.c-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-meta { font-size: 0.8rem; color: var(--text-sub); display: flex; align-items: center; gap: 6px; }
+.tag { background: rgba(128,128,128,0.1); padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600; }
+
+.play-icon {
+    width: 36px; height: 36px;
+    background: var(--bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    font-size: 0.9rem;
+}
+
+/* --- PLAYER (Full Screen) --- */
+#player {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    
+    /* Animation State: Hidden by default via Transform */
+    transform: translateY(110%);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+}
+
+#player.open {
+    transform: translateY(0);
+}
+
+.p-nav { padding: 25px 20px; display: flex; justify-content: space-between; align-items: center; }
+.close-btn { 
+    font-size: 1.8rem; background: transparent; border: none; 
+    color: var(--text); cursor: pointer; 
+    transition: 0.2s var(--ease-elastic);
+}
+.close-btn:active { transform: scale(0.7) rotate(90deg); }
+
+.p-body { 
+    flex: 1; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; 
+    padding: 0 30px 40px 30px; text-align: center; 
+}
+
+/* VINYL ANIMATION */
+.vinyl-wrap {
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: #101010;
+    border: 6px solid var(--surface);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 40px;
+    position: relative;
+    
+    /* Spin Logic */
+    animation: spin 8s linear infinite;
+    animation-play-state: paused;
+}
+.playing .vinyl-wrap { animation-play-state: running; }
+
+.vinyl-center {
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, var(--accent), #7209b7);
+    border-radius: 50%;
+    border: 4px solid #fff;
+    position: relative;
+}
+/* Shine effect on vinyl */
+.vinyl-wrap::after {
+    content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+    pointer-events: none;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.song-title-lg { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; line-height: 1.2; }
+.song-meta-lg { font-size: 1rem; color: var(--accent); font-weight: 600; margin-bottom: 30px; }
+
+/* CONTROLS */
+audio { 
+    width: 100%; margin-bottom: 25px; 
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.controls-row {
+    display: flex; gap: 15px; width: 100%;
+}
+
+.btn-big {
+    flex: 1;
+    padding: 16px;
+    border-radius: 18px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform 0.2s var(--ease-elastic);
+}
+.btn-big:active { transform: scale(0.9); }
+
+.btn-fav { background: var(--surface); color: var(--text); border: 2px solid var(--border); }
+.btn-fav.liked { color: #ff0054; border-color: #ff0054; background: rgba(255,0,84,0.05); }
+
+.btn-down { background: var(--text); color: var(--bg); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+
+/* TOAST */
+#toast {
+    position: fixed; bottom: 40px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(0,0,0,0.85); color: #fff;
+    padding: 12px 24px; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 500;
+    opacity: 0; pointer-events: none;
+    transition: 0.4s var(--ease-elastic);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
 </style>
 </head>
-
-
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()">🌗 Mode</button>
-  <p id="totalCount" style="
-  position: fixed;
-  top: 60px;
-  right: 15px;
-  font-size: 12px;
-  opacity: 0.6;
-  margin: 0;
-"></p>
-<header>Musics</header>
+<header>
+    <div style="display:flex; align-items:center;">
+        <div class="brand">Akash<span>Vibes</span></div>
+        <div class="badge-count" id="totalCounter">0</div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">🌗</button>
+</header>
 
-<div id="library">
-  <input type="text" class="search-bar" id="searchInput" placeholder="Search songs...">
+<div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('library')">Library</button>
+    <button class="tab-btn" onclick="switchTab('downloads')">Downloads</button>
 </div>
 
-<div id="detail">
-  <div class="song-title" id="songTitle"></div>
-  <div class="song-meta" id="songMeta"></div>
-  <img src="audio.jpg" class="song-image">
-  <audio id="audio" controls></audio>
-  <button class="download-btn" id="downloadBtn">Download</button>
-  <button class="back-btn" onclick="backToLibrary()">Back</button>
+<div class="view-container">
+    <div id="library" class="content-area active">
+        <input type="text" class="search-box" id="searchInput" placeholder="Search songs, movies...">
+        <div id="listContainer"></div>
+    </div>
+
+    <div id="downloads" class="content-area">
+        <div style="text-align:center; margin-top:20px; color:var(--text-sub); font-size:0.9rem;">
+            Songs here play without internet 🌐🚫
+        </div>
+        <div id="offlineContainer" style="margin-top:20px;"></div>
+    </div>
 </div>
 
-<footer>🎶 Made by Akash 💫</footer>
+<div id="player">
+    <div class="p-nav">
+        <button class="close-btn" onclick="closePlayer()">✕</button>
+        <div style="text-transform:uppercase; font-size:0.8rem; font-weight:700; letter-spacing:1px; color:var(--text-sub)">Now Playing</div>
+        <div style="width:30px"></div>
+    </div>
 
-<script>
-const songs = [
-  {file: "Dil Hai Tumhaara.m4a", title: "Dil h tumhara"},
-  {file: "Do Dil Mil Rahe Hain.m4a", title: "Do Dil mil rahe h"},
-  {file: "Guzaara.m4a", title: "Guzaara"},
-  {file: "Hasate Ho Rulate Ho.m4a", title: "Hasate Ho rulate ho"},
-  {file: "Premika Ne Pyaar se.m4a", title: "Premika"},
-  {file: "Yeh Ratein Yeh Mausam.m4a", title: "Ye raate ye mausam"},
-  {file: "Ladki Badi Anjani Hai.m4a", title: "Ladki badi Anjani h"},
-  {file: "Aaj se teri.mp3", title: "Aaj Se Teri"},
-  {file: "Apa Fer Milange.mp3", title: "Apa Fer Milange"},
-  {file: "Bulleya.mp3", title: "Bulleya"},
-  {file: "Falak Tak Chal Sath Mere.mp3", title: "Falak Tak Chal Sath Mere"},
-  {file: "Raataan Lambiyan.mp3", title: "Raataan Lambiyan"},
-  {file: "Gulabi Aankhen.mp3", title: "Gulabi Aankhen"},
-  {file: "Pee Loon.mp3", title: "Pee Loon"},
-  {file: "Channa Mereya.mp3", title: "Channa Mereya"},
-  {file: "Shayad.mp3", title: "Shayad"},
-  {file: "kesariya.mp3", title: "Kesariya"},
-  {file: "saibo.mp3", title: "Saibo"},
-  {file: "Jeene Laga Hoon.mp3", title: "Jeene Laga Hoon"},
-  {file: "sajni re.mp3", title: "Sajni"},
-  {file: "Kal Ho Na Ho.mp3", title: "Kal Ho Na Ho"},
-  {file: "muskurane ki wajah tum ho.mp3", title: "Muskurane"},
-  {file: "Ranjha.mp3", title: "Ranjha"},
-  {file: "Thoda Thoda Pyaar.mp3", title: "Thoda Thoda Pyaar"},
-  {file: "dil ibaadat.mp3", title: "Dil Ibadat"},
-  {file: "Tune Jo Na Kaha.mp3", title: "Tune Jo Na Kaha"},
-  {file: "Tumsa Koi Pyaara.mp3", title: "Tumsa Koi Pyaara"},
-  {file: "Nanga Punga Dost.mp3", title: "Nanga punga dost"},
-  {file: "aaja Sanam madhur chandani.mp3", title: "Aaja sanam"},
-  {file: "Badtameez Dil.mp3", title: "Badtameez dil"},
-  {file: "Buddhu Sa Mann h.mp3", title: "buddhu sa man h"},
-  {file: "Abhi Na Jaao Chhod Kar.mp3", title: "Abhi na jao chhod kar"},
-  {file: "Chaar kadam.mp3", title: "chaar kadam"},
-  {file: "Chor Bazari Phir Se.mp3", title: "chor bazari"},
-  {file: "Dekha ek khwab.mp3", title: "dekha ek khwaab"},
-  {file: "dekha hazaro dafa aapko.mp3", title: "dekha hazaro dafa aapko"},
-  {file: "Dil Kya Kare Jab Kissise.mp3", title: "kya kare jab kisi se"},
-  {file: "dildarian.mp3", title: "Dildarian"},
-  {file: "Ganga Kinare.mp3", title: "Ganga kinare"},
-  {file: "Har Funn Maula.mp3", title: "Har fun maula"},
-  {file: "Hum Tere Pyar mein.mp3", title: "ham tere pyar me"},
-  {file: "iktara.mp3", title: "iktara"},
-  {file: "Ilahi song lyrics (arijit singh).m4a", title: "Illahi"},
-  {file: "Intezaar.mp3", title: "Intezaar"},
-  {file: "ishq wala love.mp3", title: "ishq wala love"},
-  {file: "Jab Koi Baat.mp3", title: "jab koi baat bigad jaaye"},
-  {file: "Itna Na Mujhse Tu Pyaar Badha.mp3", title: "itna na mujhse tu pyar badha"},
-  {file: "Jeene Laga Hoon.mp3", title: "jeene laga hoon"},
-  {file: "Kasturi.mp3", title: "kasturi"},
-  {file: "kho gaye hum kahan.mp3", title: "kho gaye ham kaha"},
-  {file: "koi naa.mp3", title: "koi naa"},
-  {file: "Love is a Waste of Time.mp3", title: "love is a waste of time"},
-  {file: "Maine Royaan.mp3", title: "maine royan"},
-  {file: "Mann Mera.mp3", title: "Mann mera"},
-  {file: "Mere Samnewali Khidki Mein.mp3", title: "mere saamne wali khidki mein"},
-  {file: "O Re Piya.mp3", title: "o re piya"},
-  {file: "Labon Ko.mp3", title: "Labon ko"},
-  {file: "Mera Dil Bhi Kitna Pagal Hai.mp3", title: "Mera dil bhi kitna pagal h"},
-  {file: "O Meri Laila.mp3", title: "O meri Laila"},
-  {file: "O Rangrez.mp3", title: "Rangrez"},
-  {file: "pal pal.mp3", title: "Pal Pal"},
-  {file: "phir Mohabbat.mp3", title: "phir Mohabbat"},
-  {file: "Raanjhanaa Hua Mai Tera.mp3", title: "Ranjhana Hua me tera"},
-  {file: "Radhaan kese n jale.mp3", title: "Radha kese n jale"},
-  {file: "Sach Keh Raha Hai Deewana.mp3", title: "sach keh rha h dewaana"},
-  {file: "sahiba.mp3", title: "Sahiba"},
-  {file: "saiyaara.mp3", title: "saiyaara"},
-  {file: "Samjhawan.mp3", title: "Samjhawan"},
-  {file: "sawariya tera.mp3", title: "Sawariya tera"},
-  {file: "Shikayat by AUR.m4a", title: "Shikayat"},
-  {file: "Shree Ram Stuti.mp3", title: "Shree Ram stuti"},
-  {file: "Sweety Tera Drama.mp3", title: "Sweety tera drama"},
-  {file: "Tera Mera Hai Pyar Amar _  Ishq Murshid.m4a", title: "Tera mera h pyar amar"},
-  {file: "Teri Baaton Mein Aisa Uljha Jiya.mp3", title: "Teri baaton me"},
-  {file: "Tu Mile Dil Khile.mp3", title: "Tu mile"},
-  {file: "Ye Tune Kya Kiya.mp3", title: "Ye tune kya kiya"},
-  {file: "saudebaazi.mp3", title: "Saudebaazi"},
-  {file: "Bijlee Bijlee.mp3", title: "Bijlee Bijlee"},
-  {file: "Brown munde.m4a", title: "Brown munde"},
-  {file: "Desi Kalakaar.mp3", title: "Desi kalakar"},
-  {file: "Gerua.m4a", title: "Gerua"},
-  {file: "Jhol.mp3", title: "Jhol"},
-  {file: "Manwa lage.m4a", title: "Manwa lage"},
-  {file: "Naacho Naacho.m4a", title: "Nacho Nacho"},
-  {file: "Pasoori.m4a", title: "Pasoori"},
-  {file: "Sukh ke sab saathi.mp3", title: "sukh ke sab saathi"},
-  {file: "sun rha h n tu.m4a", title: "sun rha h n tu"},
-  {file: "Tu Aake Dekhle.m4a", title: "Tu aake dekh le"},
-  {file: "Zihaal e Miskin.mp3", title: "Zihal e miskin.."},
-  {file: "Tu Hi Haqeeqat.mp3", title: "Tu Hi Haqeeqat"},
-  {file: "Dulhe Ka Sehra.m4a", title: "Dulhe ka sehra suhana"},
-  {file: "Mere Rang Me Rangne Wali.m4a", title: "Mere rang me rangne wali"},
-  {file: "Tere Bina.m4a", title: "Tere bina"},
-  {file: "Blue Bird.m4a", title: "Blue bird"},
-  {file: "Fursat.m4a", title: "Fursat"},
-  {file: "Hadh Kardi Aapne.m4a", title: "Hadh kadi aapne"},
-  {file: "Khwab.m4a", title: "khawab"},
-  {file: "Let Me Down Slowly.m4a", title: "let me down slowly"},
-  {file: "Lil Tecca - Ransom (Official Music Video).m4a", title: "Ransom"},
-  {file: "Luka Chuppi.mp3", title: "Lukka chhippi"},
-  {file: "MARZ.m4a", title: "Marz"},
-  {file: "Aane Wala Pal.m4a", title: "Aane wal pal"},
-  {file: "Tum Jo Aaye.m4a", title: "Tum jo aaye"},
-  {file: "Agar Tum Mil Jao.m4a", title: "Agar tum mil jao"},
-  {file: "Baarish.m4a", title: "Baarish"},
-  {file: "Aram Ata Hai Deedar.m4a", title: "Aaram aata h deedaar ko"},
-  {file: "Dum-A-Dum.m4a", title: "Dum a dum"},
-  {file: "Chal Tere Ishq Mein.m4a", title: "Chal tere isqh me"},
-  {file: "Hum Mar Jayenge.m4a", title: "Ham mar jayenge"},
-  {file: "Zaalima.m4a", title: "Zaalima"},
-  {file: "teri Meri Kahaani.m4a", title: "Teri meri kahani"},
-  {file: "Yaara.m4a", title: "Yaara"},
-  {file: "Apna Time Aayega.m4a", title: "Apna time aayega"},
-  {file: "I Am the Best.m4a", title: "I am the best !!"},
-  {file: "Jag Ghoomeya.m4a", title: "Jag ghoomeya"},
-  {file: "Jee Karda.m4a", title: "Jee karda"},
-  {file: "Khamoshiyan.m4a", title: "Khamoshiyan"},
-  {file: "Malang Sajna.m4a", title: "Malang sajna"},
-  {file: "Naam Hai Mera.m4a", title: "Naam hai mera"},
-  {file: "Sher Aaya Sher.m4a", title: "Sher aaya sher"},
-  {file: "Sultan.m4a", title: "Sultan"},
-  {file: "Zinda Lyric Video - Bhaag Milkha Bhaag_Farhan Akhtar_Siddharth Mahadevan_Prasoon Joshi.m4a", title: "Zinda"},
-  {file: "Balochi.m4a", title: "FA9LA"},
-  {file: "DIL TO BACHCHA HAI.m4a", title: "Dil to bacha hai Ji"}
-];
+    <div class="p-body">
+        <div class="vinyl-wrap">
+            <div class="vinyl-center"></div>
+        </div>
 
-/* SORT SONGS A → Z */
-songs.sort((a, b) => a.title.localeCompare(b.title));
+        <div class="song-title-lg" id="pTitle">Title</div>
+        <div class="song-meta-lg" id="pMeta">Artist info</div>
 
-const library = document.getElementById('library');
-const detail = document.getElementById('detail');
-const songTitle = document.getElementById('songTitle');
-const songMeta = document.getElementById('songMeta');
-const audio = document.getElementById('audio');
-const downloadBtn = document.getElementById('downloadBtn');
-const searchInput = document.getElementById('searchInput');
+        <audio id="audio" controls></audio>
 
-function renderLibrary() {
-  library.querySelectorAll('.song-card').forEach(e => e.remove());
+        <div class="controls-row">
+            <button class="btn-big btn-fav" id="likeBtn">
+                ♥ <span id="likeCount" style="margin-left:4px">0</span>
+            </button>
+            <button class="btn-big btn-down" id="downloadBtn">
+                Download
+            </button>
+        </div>
+    </div>
+</div>
 
-  songs.forEach((song, index)=>{
-    const card = document.createElement('div');
-    card.classList.add('song-card', 'fade');
-    card.textContent = song.title;
-    card.addEventListener('click', ()=> showDetail(index));
-    library.appendChild(card);
-  });
-}
+<div id="toast">Notification</div>
 
-renderLibrary();
-  document.getElementById("totalCount").textContent = `${songs.length} Songs`;
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-function showDetail(index){
-  const s = songs[index];
-  songTitle.textContent = s.title;
-  songMeta.textContent = s.singer ? `Singer: ${s.singer}` : "";
-  audio.src = s.file;
-  audio.play();
-
-  downloadBtn.onclick = () => {
-    const a = document.createElement("a");
-    a.href = s.file;
-    a.download = s.file;
-    a.click();
-  };
-
-  library.style.display = "none";
-  detail.style.display = "flex";
-}
-
-searchInput.addEventListener("input", ()=>{
-  const value = searchInput.value.toLowerCase();
-  document.querySelectorAll(".song-card").forEach(card=>{
-    card.style.display = card.textContent.toLowerCase().includes(value)
-      ? "block" : "none";
-  });
-});
-
-function backToLibrary(){
-  detail.style.display = "none";
-  library.style.display = "flex";
-}
-  audio.addEventListener('ended', ()=>{
-  let randomIndex = Math.floor(Math.random() * songs.length);
-  showDetail(randomIndex);
-});
-
-function toggleTheme(){
-  document.body.classList.toggle("dark");
-}
-</script>
-
-<!-- BACK BUTTON PREVENT PAGE RELOAD -->
-<script>
-window.history.pushState(null, null, window.location.href);
-window.onpopstate = function () {
-  window.history.pushState(null, null, window.location.href);
+const firebaseConfig = {
+    apiKey: "AIzaSyAtnLaibP3eye5dEIoZtNAMWweM2VJPlfM",
+    authDomain: "movie-app-f0b81.firebaseapp.com",
+    databaseURL: "https://movie-app-f0b81-default-rtdb.firebaseio.com",
+    projectId: "movie-app-f0b81",
+    storageBucket: "movie-app-f0b81.firebasestorage.app",
+    messagingSenderId: "1042263105734",
+    appId: "1:1042263105734:web:72791e2e47ee397e6c37c7"
 };
-</script>
 
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const songs = [
+    {file: "Dil Hai Tumhaara.m4a", title: "Dil Hai Tumhaara", movie: "Dil Hai Tumhaara", artist: "Alka Yagnik"},
+    {file: "Do Dil Mil Rahe Hain.m4a", title: "Do Dil Mil Rahe Hain", movie: "Pardes", artist: "Kumar Sanu"},
+    {file: "Guzaara.m4a", title: "Guzaara", movie: "Coke Studio", artist: "Gurinder Seagal"},
+    {file: "Hasate Ho Rulate Ho.m4a", title: "Hasate Ho Rulate Ho", movie: "Yeh To Kamaal Ho Gaya", artist: "S.P. Balasubrahmanyam"},
+    {file: "Premika Ne Pyaar se.m4a", title: "Premika Ne Pyaar Se", movie: "Hum Se Hai Muqabla", artist: "S.P. Balasubrahmanyam"},
+    {file: "Yeh Ratein Yeh Mausam.m4a", title: "Yeh Raaten Yeh Mausam", movie: "Dilli Ka Thug", artist: "Kishore Kumar"},
+    {file: "Ladki Badi Anjani Hai.m4a", title: "Ladki Badi Anjani Hai", movie: "Kuch Kuch Hota Hai", artist: "Kumar Sanu"},
+    {file: "Aaj se teri.mp3", title: "Aaj Se Teri", movie: "Padman", artist: "Arijit Singh"},
+    {file: "Apa Fer Milange.mp3", title: "Apa Fer Milange", movie: "Single", artist: "Savi Kahlon"},
+    {file: "Bulleya.mp3", title: "Bulleya", movie: "ADHM", artist: "Amit Mishra"},
+    {file: "Falak Tak Chal Sath Mere.mp3", title: "Falak Tak", movie: "Tashan", artist: "Udit Narayan"},
+    {file: "Raataan Lambiyan.mp3", title: "Raataan Lambiyan", movie: "Shershaah", artist: "Jubin Nautiyal"},
+    {file: "Gulabi Aankhen.mp3", title: "Gulabi Aankhen", movie: "The Train", artist: "Mohammed Rafi"},
+    {file: "Pee Loon.mp3", title: "Pee Loon", movie: "OUATIM", artist: "Mohit Chauhan"},
+    {file: "Channa Mereya.mp3", title: "Channa Mereya", movie: "ADHM", artist: "Arijit Singh"},
+    {file: "Shayad.mp3", title: "Shayad", movie: "Love Aaj Kal 2", artist: "Arijit Singh"},
+    {file: "kesariya.mp3", title: "Kesariya", movie: "Brahmāstra", artist: "Arijit Singh"},
+    {file: "saibo.mp3", title: "Saibo", movie: "Shor in the City", artist: "Shreya Ghoshal"},
+    {file: "Jeene Laga Hoon.mp3", title: "Jeene Laga Hoon", movie: "Ramaiya Vastavaiya", artist: "Atif Aslam"},
+    {file: "sajni re.mp3", title: "Sajni", movie: "Laaptaa Ladies", artist: "Arijit Singh"},
+    {file: "Kal Ho Na Ho.mp3", title: "Kal Ho Naa Ho", movie: "Kal Ho Naa Ho", artist: "Sonu Nigam"},
+    {file: "muskurane ki wajah tum ho.mp3", title: "Muskurane", movie: "CityLights", artist: "Arijit Singh"},
+    {file: "Ranjha.mp3", title: "Ranjha", movie: "Shershaah", artist: "B Praak"},
+    {file: "Thoda Thoda Pyaar.mp3", title: "Thoda Thoda Pyaar", movie: "Single", artist: "Stebin Ben"},
+    {file: "dil ibaadat.mp3", title: "Dil Ibaadat", movie: "Tum Mile", artist: "KK"},
+    {file: "Tune Jo Na Kaha.mp3", title: "Tune Jo Na Kaha", movie: "New York", artist: "Mohit Chauhan"},
+    {file: "Tumsa Koi Pyaara.mp3", title: "Tumsa Koi Pyaara", movie: "Khuddar", artist: "Kumar Sanu"},
+    {file: "Nanga Punga Dost.mp3", title: "Nanga Punga Dost", movie: "PK", artist: "Shreya Ghoshal"},
+    {file: "aaja Sanam madhur chandani.mp3", title: "Aaja Sanam", movie: "Chori Chori", artist: "Lata Mangeshkar"},
+    {file: "Badtameez Dil.mp3", title: "Badtameez Dil", movie: "YJHD", artist: "Benny Dayal"},
+    {file: "Buddhu Sa Mann h.mp3", title: "Buddhu Sa Mann", movie: "Kapoor & Sons", artist: "Armaan Malik"},
+    {file: "Abhi Na Jaao Chhod Kar.mp3", title: "Abhi Na Jaao Chhod Kar", movie: "Hum Dono", artist: "Mohammed Rafi"},
+    {file: "Chaar kadam.mp3", title: "Chaar Kadam", movie: "PK", artist: "Shaan"},
+    {file: "Chor Bazari Phir Se.mp3", title: "Chor Bazari", movie: "Love Aaj Kal", artist: "Neeraj Shridhar"},
+    {file: "Dekha ek khwab.mp3", title: "Dekha Ek Khwab", movie: "Silsila", artist: "Kishore Kumar"},
+    {file: "dekha hazaro dafa aapko.mp3", title: "Dekha Hazaro Dafa", movie: "Rustom", artist: "Arijit Singh"},
+    {file: "Dil Kya Kare Jab Kissise.mp3", title: "Dil Kya Kare", movie: "Julie", artist: "Kishore Kumar"},
+    {file: "dildarian.mp3", title: "Dildarian", movie: "Amrinder Gill", artist: "Amrinder Gill"},
+    {file: "Ganga Kinare.mp3", title: "Ganga Kinare", movie: "Don", artist: "Kishore Kumar"},
+    {file: "Har Funn Maula.mp3", title: "Har Funn Maula", movie: "Koi Jaane Na", artist: "Vishal Dadlani"},
+    {file: "Hum Tere Pyar mein.mp3", title: "Hum Tere Pyar Mein", movie: "Dil Ek Mandir", artist: "Lata Mangeshkar"},
+    {file: "iktara.mp3", title: "Iktara", movie: "Wake Up Sid", artist: "Kavita Seth"},
+    {file: "Ilahi song lyrics (arijit singh).m4a", title: "Ilahi", movie: "YJHD", artist: "Arijit Singh"},
+    {file: "Intezaar.mp3", title: "Intezaar", movie: "Single", artist: "Arijit Singh"},
+    {file: "ishq wala love.mp3", title: "Ishq Wala Love", movie: "SOTY", artist: "Shekhar Ravjiani"},
+    {file: "Jab Koi Baat.mp3", title: "Jab Koi Baat", movie: "Jurm", artist: "Kumar Sanu"},
+    {file: "Itna Na Mujhse Tu Pyaar Badha.mp3", title: "Itna Na Mujhse Tu", movie: "Chhaya", artist: "Talat Mahmood"},
+    {file: "Kasturi.mp3", title: "Kasturi", movie: "Chamkila", artist: "Arijit Singh"},
+    {file: "kho gaye hum kahan.mp3", title: "Kho Gaye Hum Kahan", movie: "Baar Baar Dekho", artist: "Jasleen Royal"},
+    {file: "koi naa.mp3", title: "Koi Naa", movie: "Single", artist: "Badshah"},
+    {file: "Love is a Waste of Time.mp3", title: "Love Is A Waste Of Time", movie: "PK", artist: "Sonu Nigam"},
+    {file: "Maine Royaan.mp3", title: "Maine Royaan", movie: "Single", artist: "Tanveer Evan"},
+    {file: "Mann Mera.mp3", title: "Mann Mera", movie: "Table No. 21", artist: "Gajendra Verma"},
+    {file: "Mere Samnewali Khidki Mein.mp3", title: "Mere Samne Wali Khidki", movie: "Padosan", artist: "Kishore Kumar"},
+    {file: "O Re Piya.mp3", title: "O Re Piya", movie: "Aaja Nachle", artist: "Rahat Fateh Ali Khan"},
+    {file: "Labon Ko.mp3", title: "Labon Ko", movie: "Bhool Bhulaiyaa", artist: "KK"},
+    {file: "Mera Dil Bhi Kitna Pagal Hai.mp3", title: "Mera Dil Bhi Kitna", movie: "Saajan", artist: "Kumar Sanu"},
+    {file: "O Meri Laila.mp3", title: "O Meri Laila", movie: "Laila Majnu", artist: "Atif Aslam"},
+    {file: "O Rangrez.mp3", title: "O Rangrez", movie: "Bhaag Milkha Bhaag", artist: "Javed Bashir"},
+    {file: "pal pal.mp3", title: "Pal Pal Dil Ke Paas", movie: "Blackmail", artist: "Kishore Kumar"},
+    {file: "phir Mohabbat.mp3", title: "Phir Mohabbat", movie: "Murder 2", artist: "Arijit Singh"},
+    {file: "Raanjhanaa Hua Mai Tera.mp3", title: "Raanjhanaa", movie: "Raanjhanaa", artist: "Jaswinder Singh"},
+    {file: "Radhaan kese n jale.mp3", title: "Radha Kaise Na Jale", movie: "Lagaan", artist: "Asha Bhosle"},
+    {file: "Sach Keh Raha Hai Deewana.mp3", title: "Sach Keh Raha Hai", movie: "RHTDM", artist: "KK"},
+    {file: "sahiba.mp3", title: "Sahiba", movie: "Phillauri", artist: "Romy"},
+    {file: "saiyaara.mp3", title: "Saiyaara", movie: "Ek Tha Tiger", artist: "Mohit Chauhan"},
+    {file: "Samjhawan.mp3", title: "Samjhawan", movie: "Humpty Sharma", artist: "Arijit Singh"},
+    {file: "sawariya tera.mp3", title: "Saawariya", movie: "Saawariya", artist: "Shail Hada"},
+    {file: "Shikayat by AUR.m4a", title: "Shikayat", movie: "Single", artist: "AUR"},
+    {file: "Shree Ram Stuti.mp3", title: "Shree Ram Stuti", movie: "Devotional", artist: "Traditional"},
+    {file: "Sweety Tera Drama.mp3", title: "Sweety Tera Drama", movie: "Bareilly Ki Barfi", artist: "Dev Negi"},
+    {file: "Tera Mera Hai Pyar Amar _  Ishq Murshid.m4a", title: "Tera Mera Hai Pyar Amar", movie: "Ishq Murshid", artist: "Ahmed Jahanzeb"},
+    {file: "Teri Baaton Mein Aisa Uljha Jiya.mp3", title: "Teri Baaton Mein", movie: "TBMAUJ", artist: "Raghav"},
+    {file: "Tu Mile Dil Khile.mp3", title: "Tu Mile Dil Khile", movie: "Criminal", artist: "Kumar Sanu"},
+    {file: "Ye Tune Kya Kiya.mp3", title: "Ye Tune Kya Kiya", movie: "OUATIM", artist: "Javed Bashir"},
+    {file: "saudebaazi.mp3", title: "Saudebaazi", movie: "Aakrosh", artist: "Anupam Amod"},
+    {file: "Bijlee Bijlee.mp3", title: "Bijlee Bijlee", movie: "Single", artist: "Harrdy Sandhu"},
+    {file: "Brown munde.m4a", title: "Brown Munde", movie: "Single", artist: "AP Dhillon"},
+    {file: "Desi Kalakaar.mp3", title: "Desi Kalakaar", movie: "Desi Kalakaar", artist: "Honey Singh"},
+    {file: "Gerua.m4a", title: "Gerua", movie: "Dilwale", artist: "Arijit Singh"},
+    {file: "Jhol.mp3", title: "Jhol", movie: "Coke Studio", artist: "Maanu"},
+    {file: "Manwa lage.m4a", title: "Manwa Laage", movie: "Happy New Year", artist: "Shreya Ghoshal"},
+    {file: "Naacho Naacho.m4a", title: "Naacho Naacho", movie: "RRR", artist: "Vishal Mishra"},
+    {file: "Pasoori.m4a", title: "Pasoori", movie: "Coke Studio", artist: "Ali Sethi"},
+    {file: "Sukh ke sab saathi.mp3", title: "Sukh Ke Sab Saathi", movie: "Gopi", artist: "Mohammed Rafi"},
+    {file: "sun rha h n tu.m4a", title: "Sun Raha Hai Na Tu", movie: "Aashiqui 2", artist: "Ankit Tiwari"},
+    {file: "Tu Aake Dekhle.m4a", title: "Tu Aake Dekhle", movie: "Single", artist: "King"},
+    {file: "Zihaal e Miskin.mp3", title: "Zihaal e Miskin", movie: "Single", artist: "Vishal Mishra"},
+    {file: "Tu Hi Haqeeqat.mp3", title: "Tu Hi Haqeeqat", movie: "Tum Mile", artist: "Javed Ali"},
+    {file: "Dulhe Ka Sehra.m4a", title: "Dulhe Ka Sehra", movie: "Dhadkan", artist: "Nusrat Fateh Ali Khan"},
+    {file: "Mere Rang Me Rangne Wali.m4a", title: "Mere Rang Mein", movie: "Maine Pyar Kiya", artist: "S.P. Balasubrahmanyam"},
+    {file: "Tere Bina.m4a", title: "Tere Bina", movie: "Guru", artist: "A.R. Rahman"},
+    {file: "Blue Bird.m4a", title: "Blue Bird", movie: "Naruto", artist: "Ikimonogakari"},
+    {file: "Fursat.m4a", title: "Fursat", movie: "Single", artist: "Arjun Kanungo"},
+    {file: "Hadh Kardi Aapne.m4a", title: "Hadh Kar Di Aapne", movie: "Hadh Kar Di Aapne", artist: "Udit Narayan"},
+    {file: "Khwab.m4a", title: "Khwab", movie: "Single", artist: "Iqlipse Nova"},
+    {file: "Let Me Down Slowly.m4a", title: "Let Me Down Slowly", movie: "Single", artist: "Alec Benjamin"},
+    {file: "Lil Tecca - Ransom (Official Music Video).m4a", title: "Ransom", movie: "Single", artist: "Lil Tecca"},
+    {file: "Luka Chuppi.mp3", title: "Luka Chuppi", movie: "RDB", artist: "A.R. Rahman"},
+    {file: "MARZ.m4a", title: "Marz", movie: "Yellow Diary", artist: "The Yellow Diary"},
+    {file: "Aane Wala Pal.m4a", title: "Aane Wala Pal", movie: "Gol Maal", artist: "Kishore Kumar"},
+    {file: "Tum Jo Aaye.m4a", title: "Tum Jo Aaye", movie: "OUATIM", artist: "Rahat Fateh Ali Khan"},
+    {file: "Agar Tum Mil Jao.m4a", title: "Agar Tum Mil Jao", movie: "Zeher", artist: "Shreya Ghoshal"},
+    {file: "Baarish.m4a", title: "Baarish", movie: "Yaariyan", artist: "Mohammed Irfan"},
+    {file: "Aram Ata Hai Deedar.m4a", title: "Aaram Aata Hai", movie: "Single", artist: "Aftab Sabri"},
+    {file: "Dum-A-Dum.m4a", title: "Dum A Dum", movie: "Coke Studio", artist: "Abida Parveen"},
+    {file: "Chal Tere Ishq Mein.m4a", title: "Chal Tere Ishq Mein", movie: "Gadar 2", artist: "Neeti Mohan"},
+    {file: "Hum Mar Jayenge.m4a", title: "Hum Mar Jayenge", movie: "Aashiqui 2", artist: "Arijit Singh"},
+    {file: "Zaalima.m4a", title: "Zaalima", movie: "Raees", artist: "Arijit Singh"},
+    {file: "teri Meri Kahaani.m4a", title: "Teri Meri Kahaani", movie: "Gabbar", artist: "Arijit Singh"},
+    {file: "Yaara.m4a", title: "Yaara", movie: "Single", artist: "Mamta Sharma"},
+    {file: "Apna Time Aayega.m4a", title: "Apna Time Aayega", movie: "Gully Boy", artist: "Ranveer Singh"},
+    {file: "I Am the Best.m4a", title: "I Am The Best", movie: "PBDHH", artist: "Abhijeet"},
+    {file: "Jag Ghoomeya.m4a", title: "Jag Ghoomeya", movie: "Sultan", artist: "Rahat Fateh Ali Khan"},
+    {file: "Jee Karda.m4a", title: "Jee Karda", movie: "Badlapur", artist: "Divya Kumar"},
+    {file: "Khamoshiyan.m4a", title: "Khamoshiyan", movie: "Khamoshiyan", artist: "Arijit Singh"},
+    {file: "Malang Sajna.m4a", title: "Malang Sajna", movie: "Single", artist: "Sachet-Parampara"},
+    {file: "Naam Hai Mera.m4a", title: "Naam Hai Mera", movie: "Hate Story 4", artist: "Neeti Mohan"},
+    {file: "Sher Aaya Sher.m4a", title: "Sher Aaya Sher", movie: "Gully Boy", artist: "DIVINE"},
+    {file: "Sultan.m4a", title: "Sultan Title Track", movie: "Sultan", artist: "Sukhwinder Singh"},
+    {file: "Zinda Lyric Video - Bhaag Milkha Bhaag_Farhan Akhtar_Siddharth Mahadevan_Prasoon Joshi.m4a", title: "Zinda", movie: "Bhaag Milkha Bhaag", artist: "Siddharth Mahadevan"},
+    {file: "Balochi.m4a", title: "Fa9la", movie: "Single", artist: "Balochi"},
+    {file: "DIL TO BACHCHA HAI.m4a", title: "Dil Toh Bachcha Hai", movie: "Ishqiya", artist: "Rahat Fateh Ali Khan"}
+];
+songs.sort((a,b) => a.title.localeCompare(b.title));
+
+// REFERENCES
+const listContainer = document.getElementById('listContainer');
+const offlineContainer = document.getElementById('offlineContainer');
+const player = document.getElementById('player');
+const audio = document.getElementById('audio');
+const toast = document.getElementById('toast');
+const totalCounter = document.getElementById('totalCounter');
+
+// Player Data
+const pTitle = document.getElementById('pTitle');
+const pMeta = document.getElementById('pMeta');
+const likeBtn = document.getElementById('likeBtn');
+const likeCountEl = document.getElementById('likeCount');
+const downloadBtn = document.getElementById('downloadBtn');
+
+// OFFLINE DB SETUP
+const DB_NAME = "AkashPremiumDB";
+const STORE = "tracks";
+let dbInstance;
+
+function initDB() {
+    const r = indexedDB.open(DB_NAME, 1);
+    r.onupgradeneeded = (e) => {
+        const d = e.target.result;
+        if(!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE, {keyPath: "title"});
+    };
+    r.onsuccess = (e) => {
+        dbInstance = e.target.result;
+        renderOffline();
+    }
+}
+initDB();
+
+async function saveOffline(song) {
+    showToast("Downloading... ⏳");
+    try {
+        const resp = await fetch(song.file);
+        const blob = await resp.blob();
+        const tx = dbInstance.transaction(STORE, "readwrite");
+        tx.objectStore(STORE).put({...song, blob: blob});
+        tx.oncomplete = () => {
+            showToast("Saved Offline! ✅");
+            downloadBtn.innerText = "Saved";
+            renderOffline();
+        };
+    } catch(e) {
+        showToast("Error saving offline. ❌");
+    }
+}
+
+// RENDERERS
+function renderLibrary(query="") {
+    listContainer.innerHTML = "";
+    const term = query.toLowerCase();
+    let count = 0;
+
+    songs.forEach((s, i) => {
+        if(s.title.toLowerCase().includes(term) || s.movie.toLowerCase().includes(term)) {
+            count++;
+            const el = document.createElement('div');
+            el.className = 'card';
+            // Stagger animation delay based on index
+            el.style.animationDelay = `${i * 0.03}s`; 
+            
+            el.innerHTML = `
+                <div class="card-info">
+                    <div class="c-title">${s.title}</div>
+                    <div class="c-meta"><span class="tag">${s.movie}</span> ${s.artist.split(',')[0]}</div>
+                </div>
+                <div class="play-icon">▶</div>
+            `;
+            el.onclick = () => openPlayer(s, false);
+            listContainer.appendChild(el);
+        }
+    });
+    totalCounter.innerText = count;
+}
+
+function renderOffline() {
+    if(!dbInstance) return;
+    const tx = dbInstance.transaction(STORE, "readonly");
+    const req = tx.objectStore(STORE).getAll();
+    req.onsuccess = () => {
+        const data = req.result;
+        offlineContainer.innerHTML = "";
+        if(data.length === 0) return;
+        
+        data.forEach((s) => {
+            const el = document.createElement('div');
+            el.className = 'card';
+            el.innerHTML = `
+                <div class="card-info">
+                    <div class="c-title">${s.title}</div>
+                    <div class="c-meta"><span class="tag" style="color:#2ec4b6">Offline</span> ${s.artist}</div>
+                </div>
+                <div class="play-icon">▶</div>
+            `;
+            el.onclick = () => openPlayer(s, true);
+            offlineContainer.appendChild(el);
+        });
+    }
+}
+
+// PLAYER LOGIC
+window.openPlayer = function(song, isOffline) {
+    pTitle.innerText = song.title;
+    pMeta.innerText = `${song.movie} • ${song.artist}`;
+    
+    player.classList.add('open'); // Trigger Slide Up
+    player.classList.add('playing'); // Trigger Vinyl Spin
+
+    if(isOffline && song.blob) {
+        audio.src = URL.createObjectURL(song.blob);
+        likeBtn.style.display = "none";
+        downloadBtn.style.display = "none";
+    } else {
+        audio.src = song.file;
+        likeBtn.style.display = "flex";
+        downloadBtn.style.display = "flex";
+        downloadBtn.innerText = "Download";
+        
+        // Firebase Likes
+        const id = song.title.replace(/[.#$[\]]/g, '_').replace(/\s+/g, '_');
+        const rRef = ref(db, 'likes/'+id);
+        
+        onValue(rRef, (snap) => {
+            likeCountEl.innerText = snap.val() || 0;
+        });
+        
+        // Clean click listener
+        const newBtn = likeBtn.cloneNode(true);
+        likeBtn.parentNode.replaceChild(newBtn, likeBtn);
+        document.getElementById('likeBtn').onclick = function() {
+            runTransaction(rRef, (c) => (c||0)+1);
+            this.classList.add('liked');
+            showToast("Liked! ❤️");
+        }
+        
+        // Download
+        downloadBtn.onclick = () => {
+            // Browser Download
+            const a = document.createElement('a');
+            a.href = song.file;
+            a.download = song.file;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            // App Save
+            saveOffline(song);
+        }
+    }
+    audio.play();
+}
+
+window.closePlayer = function() {
+    player.classList.remove('open');
+    player.classList.remove('playing');
+    setTimeout(() => {
+        audio.pause();
+    }, 400); // Wait for slide down
+}
+
+// UTILS
+window.toggleTheme = () => document.body.classList.toggle('dark');
+
+window.switchTab = (tab) => {
+    // Buttons
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    // Areas
+    const library = document.getElementById('library');
+    const downloads = document.getElementById('downloads');
+    
+    library.classList.remove('active');
+    downloads.classList.remove('active');
+    
+    if(tab === 'library') {
+        document.querySelector("button[onclick=\"switchTab('library')\"]").classList.add('active');
+        library.classList.add('active');
+    } else {
+        document.querySelector("button[onclick=\"switchTab('downloads')\"]").classList.add('active');
+        downloads.classList.add('active');
+        renderOffline();
+    }
+}
+
+function showToast(msg) {
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// Init
+renderLibrary();
+document.getElementById('searchInput').addEventListener('input', (e) => renderLibrary(e.target.value));
+audio.addEventListener('ended', () => {
+    const r = Math.floor(Math.random()*songs.length);
+    openPlayer(songs[r], false);
+});
+
+</script>
 </body>
-  </html>
+</html>
